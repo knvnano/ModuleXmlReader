@@ -64,7 +64,10 @@
                   <TabItem Header="{Binding Text[NewScanTab]}"><TextBox Name="NewScanText" Text="{Binding NewScanABCDCode, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
                   <TabItem Header="{Binding Text[ScanTab]}"><TextBox Name="ScanText" Text="{Binding ScanABCDCode, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
                 </TabControl>
-                <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10"><TextBlock Text="{Binding Text[Missing]}" Classes="caption" /><TextBlock Name="MissingText" Text="{Binding MissingPixels}" Foreground="#C8A0F5" FontSize="12" /></StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10"><TextBlock Text="{Binding Text[Missing]}" Classes="caption" /><TextBlock Name="MissingText" Text="{Binding MissingPixels}" Foreground="#C8A0F5" FontSize="12" IsVisible="{Binding Navigation.HasNoMissing}" />
+                  <Button Content="◀" ToolTip.Tip="{Binding Text[PreviousMissing]}" Command="{Binding Navigation.PreviousMissingCommand}" Padding="6,2" />
+                  <Button Content="▶" ToolTip.Tip="{Binding Text[NextMissing]}" Command="{Binding Navigation.NextMissingCommand}" Padding="6,2" />
+                  <ScrollViewer MaxWidth="440" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"><ItemsControl ItemsSource="{Binding Navigation.Missing}"><ItemsControl.ItemsPanel><ItemsPanelTemplate><StackPanel Orientation="Horizontal" Spacing="3" /></ItemsPanelTemplate></ItemsControl.ItemsPanel><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:MissingPointViewModel"><Button Content="{Binding Number}" Command="{Binding SelectCommand}" Foreground="#C8A0F5" Padding="5,2" /></DataTemplate></ItemsControl.ItemTemplate></ItemsControl></ScrollViewer></StackPanel>
                 <TextBlock Grid.Row="4" Text="{Binding ValidationError}" Foreground="#FF8795" TextWrapping="Wrap" FontSize="12" />
               </Grid>
             </Border>

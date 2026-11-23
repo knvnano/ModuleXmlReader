@@ -109,5 +109,7 @@
   "SimGroupOrder": "The data group order could not be determined.",
   "SimUnsupportedMapping": "This mapping needs additional scan rules: simple offsets leave the group bounds.",
   "GoPoint": "Go to point",
-  "PointNotFound": "Point number not found"
+  "PointNotFound": "Point number not found",
+  "PreviousMissing": "Previous missing point",
+  "NextMissing": "Next missing point"
 }
