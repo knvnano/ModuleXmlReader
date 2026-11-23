@@ -189,7 +189,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
             };
             ValidationError = state.ValidationProblem is { } problem ? Text.Format(problem) : state.ValidationError;
             Preview = state.Preview; RefreshComparison(); Navigation.Update(Preview,state.PointTableData);
-            Simulation.UpdateModel(state.Preview?.Simulation); RefreshCoordinates();
+            Simulation.UpdateModel(state.Preview?.Simulation); RefreshCoordinates(); RefreshDiagnostics();
             RotationLabel = !state.IsLoaded ? Text["RotationNone"] : state.RotationDegrees is int angle
                 ? Text.Format("Rotation", angle) : Text.Format("RotationRelative", state.RelativeRotationDegrees);
             IsLoaded = state.IsLoaded; HasChanges = state.HasChanges; OpenedFilePath = state.OpenedFilePath; RaisePropertyChanged(nameof(FileStatus));

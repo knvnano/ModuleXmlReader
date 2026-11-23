@@ -129,5 +129,13 @@
   "State": "Состояние",
   "Apply": "Применить",
   "CoordinateValid": "Координата",
-  "CoordinateInvalid": "Неверная координата"
+  "CoordinateInvalid": "Неверная координата",
+  "SeverityError": "Ошибка",
+  "SeverityWarning": "Предупреждение",
+  "SeverityInfo": "Информация",
+  "DiagOdd": "Неполная пара в конце таблицы",
+  "DiagByte": "Точка {0}: координаты должны быть байтами",
+  "DiagHalfMissing": "Точка {0}: пропуск должен быть 255-255",
+  "DiagMissing": "Пропущена точка {0}",
+  "DiagDuplicate": "Точки {0} и {1} имеют одинаковые координаты"
 }

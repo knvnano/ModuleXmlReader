@@ -129,5 +129,13 @@
   "State": "State",
   "Apply": "Apply",
   "CoordinateValid": "Coordinate",
-  "CoordinateInvalid": "Invalid coordinate"
+  "CoordinateInvalid": "Invalid coordinate",
+  "SeverityError": "Error",
+  "SeverityWarning": "Warning",
+  "SeverityInfo": "Info",
+  "DiagOdd": "Incomplete pair at end of table",
+  "DiagByte": "Point {0}: coordinates must be bytes",
+  "DiagHalfMissing": "Point {0}: a missing entry must be 255-255",
+  "DiagMissing": "Missing point {0}",
+  "DiagDuplicate": "Points {0} and {1} have identical coordinates"
 }

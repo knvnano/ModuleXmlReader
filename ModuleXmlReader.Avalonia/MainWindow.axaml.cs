@@ -22,7 +22,9 @@ public partial class MainWindow : Window
         DataContextChanged += (_,_) =>
         {
             if(DataContext is MainWindowViewModel model) model.Navigation.PropertyChanged += (_,e) =>
-            { if(e.PropertyName=="RequestVersion") { if(DataTabs.SelectedIndex!=0) { DataTabs.SelectedIndex=1; PointTableText.Focus(); }
+            { if(e.PropertyName=="RequestVersion") { if(model.Navigation.RequestedField=="NewScanABCDCode") { DataTabs.SelectedItem=NewScanTabItem;return; }
+              if(model.Navigation.RequestedField=="ScanABCDCode") { DataTabs.SelectedItem=LegacyScanTabItem;return; }
+              if(DataTabs.SelectedIndex!=0) { DataTabs.SelectedIndex=1; PointTableText.Focus(); }
               else if(model.SelectedCoordinate is not null) CoordinateList.ScrollIntoView(model.SelectedCoordinate); } };
         };
         Closing += async (_, e) =>

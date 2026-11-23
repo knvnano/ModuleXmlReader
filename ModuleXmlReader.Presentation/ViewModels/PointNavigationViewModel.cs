@@ -13,6 +13,8 @@ public sealed class PointNavigationViewModel : ObservableObject
     public int SelectedNumber => _selected;
     public int SelectionStart => _start;
     public int SelectionEnd => _end;
+    public string RequestedField { get; private set; } = "PointTableData";
+    public void SelectField(string field) { RequestedField=field;_version++;RaisePropertyChanged(nameof(RequestVersion)); }
     public int RequestVersion => _version;
     public IReadOnlyList<PreviewPoint> Locations { get; private set; } = Array.Empty<PreviewPoint>();
     public bool HasNoMissing => Missing.Count==0;
@@ -47,13 +49,13 @@ public sealed class PointNavigationViewModel : ObservableObject
     public void Go()
     {
         var tokens=_raw.Split('-');
-        if (_data is null || !int.TryParse(Number,out int n) || n<1 || n>tokens.Length/2)
+        if (!int.TryParse(Number,out int n) || n<1 || n>tokens.Length/2)
         { _error="PointNotFound"; RaisePropertyChanged(nameof(Error)); return; }
-        _error=""; _selected=n;
+        _error=""; _selected=n; RequestedField="PointTableData";
         _start=tokens.Take((n-1)*2).Sum(t=>t.Length+1);
         _end=_start+tokens[(n-1)*2].Length+1+tokens[(n-1)*2+1].Length;
-        Locations=_data.Pixels?.Where(p=>p.Number==n).Select(p=>new PreviewPoint(p.X,p.Y)).ToArray() ?? [];
-        if (Locations.Count==0 && _data.GapMarkers is { } gaps)
+        Locations=_data?.Pixels?.Where(p=>p.Number==n).Select(p=>new PreviewPoint(p.X,p.Y)).ToArray() ?? [];
+        if (Locations.Count==0 && _data?.GapMarkers is { } gaps)
             Locations=gaps.Where(g=>n>=g.FirstMissing && n<g.FirstMissing+g.Count).Select(g=>new PreviewPoint(g.X,g.Y)).Distinct().ToArray();
         _version++;
         foreach(var p in new[]{nameof(Error),nameof(SelectedNumber),nameof(SelectionStart),nameof(SelectionEnd),nameof(Locations),nameof(RequestVersion)}) RaisePropertyChanged(p);
