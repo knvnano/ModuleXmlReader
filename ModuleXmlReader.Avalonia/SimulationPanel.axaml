@@ -12,6 +12,7 @@
       </StackPanel>
       <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8"><TextBlock Text="{Binding Text[SimSpeed]}" VerticalAlignment="Center" FontSize="11" /><Slider Grid.Column="1" Minimum="1" Maximum="32" Value="{Binding Speed, Mode=TwoWay}" /><TextBlock Grid.Column="2" Text="{Binding Speed, StringFormat='{}{0:0}'}" VerticalAlignment="Center" /></Grid>
       <CheckBox Content="{Binding Text[TraceMode]}" IsChecked="{Binding TraceMode, Mode=TwoWay}" />
+      <ComboBox ItemsSource="{Binding GroupChoices}" SelectedItem="{Binding SelectedGroupChoice, Mode=TwoWay}" HorizontalAlignment="Stretch"><ComboBox.ItemTemplate><DataTemplate x:DataType="vm:DataGroupChoice"><TextBlock Text="{Binding Label}" /></DataTemplate></ComboBox.ItemTemplate></ComboBox>
       <CheckBox Name="SimulationGroupsToggle" Content="{Binding Text[SimShowGroups]}" IsChecked="{Binding ShowGroups, Mode=TwoWay}" />
       <Border Background="#182C3B" CornerRadius="8" Padding="10"><StackPanel Spacing="5"><TextBlock Text="{Binding PhaseLabel}" Foreground="#65DEC8" FontWeight="SemiBold" /><TextBlock Text="{Binding Status}" TextWrapping="Wrap" FontSize="11" /></StackPanel></Border>
       <UniformGrid Columns="3">

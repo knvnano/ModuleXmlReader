@@ -44,6 +44,7 @@ public sealed class ModulePreview : Control
     { base.OnAttachedToVisualTree(e); _attached = true; SetLightTargets(); }
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     { _attached = false; _fadeTimer.Stop(); _fadeWatch.Stop(); _lights.Clear(); base.OnDetachedFromVisualTree(e); }
+    public int SelectedGroup { get; set; } = -1;
     public bool TraceMode { get; set; }
     public int TraceNumber { get; set; }
     public event Action<int>? PixelClicked;
@@ -81,7 +82,9 @@ public sealed class ModulePreview : Control
         if (Data is not { } data) return;
         double cell = CellSize;
         context.FillRectangle(GridBrush, new Rect(0, 0, Width, Height));
-        foreach (var p in data.Points) context.FillRectangle(Frame is null ? TraceBrush : Brush.Parse("#304D58"), new Rect(p.X * cell, p.Y * cell, cell, cell));
+        var selected=data.Simulation?.Groups.FirstOrDefault(g=>g.InputId==SelectedGroup);
+        using var groupClip=context.PushClip(selected is null ? new Rect(0,0,Width,Height) : new Rect(selected.X*cell,selected.Y*cell,selected.Width*cell,selected.Height*cell));
+        foreach (var p in data.Points) context.FillRectangle(Frame is null ? GroupBrush(data,p.X,p.Y) : Brush.Parse("#304D58"), new Rect(p.X * cell, p.Y * cell, cell, cell));
         var missing = data.Pixels?.Where(p => p.IsMissing).Select(p => (p.X, p.Y)).ToHashSet() ?? [];
         if (data.Pixels is { } pixels)
             foreach (var p in pixels.Where(p => p.IsMissing))
@@ -120,6 +123,12 @@ public sealed class ModulePreview : Control
         // grid line, number or red address cell cannot hide the separator.
         if (data.GapMarkers is { } gaps)
             foreach (var gap in gaps) context.FillRectangle(MissingBrush, GapRectangle(gap));
+    }
+    private IBrush GroupBrush(PreviewData data,int x,int y)
+    {
+        if(ShowGroups && data.Simulation?.Groups.FirstOrDefault(g=>x>=g.X&&x<g.X+g.Width&&y>=g.Y&&y<g.Y+g.Height) is { } group)
+            return Brush.Parse(ModuleXmlReader.Presentation.ViewModels.SimulationGroupViewModel.ColorFor(group.InputId));
+        return TraceBrush;
     }
     private void DrawTrace(DrawingContext context,PreviewData data)
     {

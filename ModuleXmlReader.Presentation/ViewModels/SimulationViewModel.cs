@@ -8,6 +8,16 @@ namespace ModuleXmlReader.Presentation.ViewModels;
 public sealed class SimulationViewModel : ObservableObject, IDisposable
 {
     public TextCatalog Text { get; }
+    public IReadOnlyList<DataGroupChoice> GroupChoices { get; private set; } = Array.Empty<DataGroupChoice>();
+    private DataGroupChoice? _selectedGroupChoice;
+    public DataGroupChoice? SelectedGroupChoice { get=>_selectedGroupChoice;set { if(SetProperty(ref _selectedGroupChoice,value)) { RaisePropertyChanged(nameof(SelectedGroup));Publish(); } } }
+    public int SelectedGroup => SelectedGroupChoice?.InputId ?? -1;
+    private void RefreshGroupChoices()
+    {
+        int previous=SelectedGroup;
+        GroupChoices=new[]{new DataGroupChoice(-1,Text["AllGroups"])}.Concat((_model?.Groups ?? Array.Empty<SimulationGroup>()).Select(g=>new DataGroupChoice(g.InputId,Text.Format("SimGroup",g.InputId+1,g.Slot+1)))).ToArray();
+        RaisePropertyChanged(nameof(GroupChoices)); SelectedGroupChoice=GroupChoices.FirstOrDefault(g=>g.InputId==previous) ?? GroupChoices[0];
+    }
     private readonly IAnimationClock _clock;
     private SimulationModel? _model;
     private ModuleSimulationEngine? _engine;
@@ -52,7 +62,7 @@ public sealed class SimulationViewModel : ObservableObject, IDisposable
         if (ReferenceEquals(_model, model)) return;
         Pause(); _traceNumber=0; _model = model; IsEnabled = false; _outputHold = 0;
         _engine = model is { Problem: null } && model.Points.Count > 0 && model.Addresses.Count > 0 ? new(model) : null;
-        RaisePropertyChanged(nameof(CanSimulate)); Publish();
+        RefreshGroupChoices(); RaisePropertyChanged(nameof(CanSimulate)); Publish();
     }
     public void Pause() { IsRunning = false; _clock.Stop(); RaisePropertyChanged(nameof(PlayLabel)); }
     private void Tick(object? sender, EventArgs e)
@@ -74,10 +84,10 @@ public sealed class SimulationViewModel : ObservableObject, IDisposable
         Frame = IsEnabled && !TraceMode ? _engine?.Frame() : null;
         RaisePropertyChanged(nameof(TraceNumber));
         var snapshot = _engine?.Frame();
-        Groups = snapshot?.Groups.Select(g => new SimulationGroupViewModel(g, Text)).ToArray() ?? Array.Empty<SimulationGroupViewModel>();
+        Groups = snapshot?.Groups.Where(g=>SelectedGroup<0||g.Group.InputId==SelectedGroup).Select(g => new SimulationGroupViewModel(g, Text)).ToArray() ?? Array.Empty<SimulationGroupViewModel>();
         foreach (var name in new[] { nameof(PlayLabel), nameof(PhaseLabel), nameof(Status), nameof(ClockSignal), nameof(LatchSignal), nameof(OeSignal) }) RaisePropertyChanged(name);
     }
-    private void LanguageChanged(object? sender, EventArgs e) => Publish();
+    private void LanguageChanged(object? sender, EventArgs e) { RefreshGroupChoices();Publish(); }
     public void Dispose() { _clock.Tick -= Tick; Text.LanguageChanged -= LanguageChanged; _clock.Stop(); _clock.Dispose(); }
 }
 public sealed class SimulationGroupViewModel
@@ -96,3 +106,5 @@ public sealed class SimulationGroupViewModel
     }
 }
 public sealed record SimulationRegisterViewModel(string Number, string Fill);
+
+public sealed record DataGroupChoice(int InputId,string Label);

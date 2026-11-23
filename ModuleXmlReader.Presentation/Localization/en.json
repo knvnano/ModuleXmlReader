@@ -139,5 +139,6 @@
   "DiagMissing": "Missing point {0}",
   "DiagDuplicate": "Points {0} and {1} have identical coordinates",
   "TraceMode": "Trace traversal and direction arrows",
-  "TraceStatus": "Trace point {0} / {1}. Missing entries retain their positions."
+  "TraceStatus": "Trace point {0} / {1}. Missing entries retain their positions.",
+  "AllGroups": "All data groups"
 }
