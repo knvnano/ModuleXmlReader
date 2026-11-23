@@ -35,6 +35,8 @@
       <Grid ColumnDefinitions="*,Auto" ColumnSpacing="18">
         <StackPanel Spacing="6"><TextBlock Text="{Binding PageTitle}" FontSize="27" FontWeight="SemiBold" /><TextBlock Text="{Binding PageSubtitle}" Classes="muted" /></StackPanel>
         <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <Button Content="↶" ToolTip.Tip="{Binding Text[Undo]}" Command="{Binding UndoCommand}" Classes="subtle" />
+          <Button Content="↷" ToolTip.Tip="{Binding Text[Redo]}" Command="{Binding RedoCommand}" Classes="subtle" />
           <Button Name="LanguageButton" Content="{Binding LanguageButtonText}" Command="{Binding ToggleLanguageCommand}" Classes="subtle" />
           <Button Name="OpenButton" Content="{Binding Text[Open]}" Command="{Binding OpenCommand}" Classes="subtle" />
           <Button Name="SaveButton" Content="{Binding Text[Save]}" Command="{Binding SaveCommand}" Classes="primary" />
@@ -62,6 +64,7 @@
                 <TabControl Name="DataTabs" Grid.Row="2">
                   <TabItem Header="{Binding Text[PointsTab]}"><TextBox Name="PointTableText" SelectionStart="{Binding Navigation.SelectionStart, Mode=OneWay}" SelectionEnd="{Binding Navigation.SelectionEnd, Mode=OneWay}" Text="{Binding PointTableData, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
                   <TabItem Header="{Binding Text[NewScanTab]}"><TextBox Name="NewScanText" Text="{Binding NewScanABCDCode, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
+                  <TabItem Header="{Binding Text[ActionHistory]}"><TextBox Text="{Binding ActionHistory}" IsReadOnly="True" AcceptsReturn="True" Classes="code" /></TabItem>
                   <TabItem Header="{Binding Text[ScanTab]}"><TextBox Name="ScanText" Text="{Binding ScanABCDCode, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
                 </TabControl>
                 <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10"><TextBlock Text="{Binding Text[Missing]}" Classes="caption" /><TextBlock Name="MissingText" Text="{Binding MissingPixels}" Foreground="#C8A0F5" FontSize="12" IsVisible="{Binding Navigation.HasNoMissing}" />

@@ -111,5 +111,12 @@
   "GoPoint": "Go to point",
   "PointNotFound": "Point number not found",
   "PreviousMissing": "Previous missing point",
-  "NextMissing": "Next missing point"
+  "NextMissing": "Next missing point",
+  "Undo": "Undo (Ctrl+Z)",
+  "Redo": "Redo (Ctrl+Y)",
+  "ActionHistory": "Action history",
+  "ActionEdit": "Edit table",
+  "ActionRotate": "Rotate module",
+  "ActionUndo": "Undo action",
+  "ActionRedo": "Redo action"
 }

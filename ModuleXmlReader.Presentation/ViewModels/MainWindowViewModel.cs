@@ -75,6 +75,9 @@ public sealed class MainWindowViewModel : ObservableObject, IDisposable
     public bool HasChanges { get => _hasChanges; private set => SetProperty(ref _hasChanges, value); }
     public bool IsBusy { get => _isBusy; private set => SetProperty(ref _isBusy, value); }
     public bool IsEditorReadOnly => !IsLoaded || IsBusy;
+    public AsyncCommand UndoCommand { get; }
+    public AsyncCommand RedoCommand { get; }
+    public string ActionHistory => string.Join(Environment.NewLine,_editor.ActionHistory.Select(a=>Text[a]));
     public AsyncCommand OpenCommand { get; }
     public AsyncCommand SaveCommand { get; }
     public AsyncCommand RotateCommand { get; }
@@ -101,6 +104,8 @@ public sealed class MainWindowViewModel : ObservableObject, IDisposable
         Text.LanguageChanged += LanguageChanged;
         _editor = editor; _files = files; _notifications = notifications; _unsaved = unsaved;
         Parameters = Array.AsReadOnly(ModuleParameters.Names.Select(name => new ParameterViewModel(name, editor.State.Parameters[name])).ToArray());
+        UndoCommand=new(()=>GuardAsync(()=> { _editor.Undo();return Task.CompletedTask; }),()=>!IsBusy && _editor.CanUndo);
+        RedoCommand=new(()=>GuardAsync(()=> { _editor.Redo();return Task.CompletedTask; }),()=>!IsBusy && _editor.CanRedo);
         OpenCommand = new(() => GuardAsync(OpenAsync), () => !IsBusy);
         SaveCommand = new(() => GuardAsync(async () => { await SaveCoreAsync(); }), () => CanChangeDocument);
         RotateCommand = new(() => GuardAsync(() => RotateAsync(Rotation.Right90)), () => CanChangeDocument);
@@ -187,13 +192,14 @@ public sealed class MainWindowViewModel : ObservableObject, IDisposable
             IsLoaded = state.IsLoaded; HasChanges = state.HasChanges; OpenedFilePath = state.OpenedFilePath; RaisePropertyChanged(nameof(FileStatus));
         }
         finally { _refreshing = false; }
+        RaisePropertyChanged(nameof(ActionHistory));
         UpdateCommands();
     }
     private void UpdateCommands()
     {
         // Raise the derived read-only property as busy/load state changes.
         OnEditorReadOnlyChanged();
-        foreach (var command in new[] { OpenCommand, SaveCommand, RotateCommand, AboutCommand, ShowChangesCommand, ShowLogsCommand, RefreshChangesCommand, RefreshLogsCommand, ActivityLogsCommand, ErrorLogsCommand, DiagnosticLogsCommand })
+        foreach (var command in new[] { UndoCommand, RedoCommand, OpenCommand, SaveCommand, RotateCommand, AboutCommand, ShowChangesCommand, ShowLogsCommand, RefreshChangesCommand, RefreshLogsCommand, ActivityLogsCommand, ErrorLogsCommand, DiagnosticLogsCommand })
             command.RaiseCanExecuteChanged();
     }
     private void OnEditorReadOnlyChanged() => RaisePropertyChanged(nameof(IsEditorReadOnly));

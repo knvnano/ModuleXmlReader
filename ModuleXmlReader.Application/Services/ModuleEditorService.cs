@@ -8,6 +8,27 @@ public sealed class ModuleEditorService(IModuleRepository repository, IMissingPi
     private readonly IModuleSimulationService _simulation = simulation ?? new ModuleSimulationService();
     private readonly IAppLogger _log = logger ?? NullAppLogger.Instance;
     private IModuleDocument? _document;
+    private readonly List<(ModuleEditorState State,string Action)> _undo = new(), _redo = new();
+    private readonly List<string> _actions = new();
+    public bool CanUndo => _undo.Count>0;
+    public bool CanRedo => _redo.Count>0;
+    public IReadOnlyList<string> ActionHistory => _actions.AsReadOnly();
+    private void Remember(ModuleEditorState before,string action)
+    {
+        if(Signature(before)==Signature(State)) return;
+        _undo.Add((before,action)); if(_undo.Count>200)_undo.RemoveAt(0); _redo.Clear();
+        _actions.Add(action); if(_actions.Count>200)_actions.RemoveAt(0);
+    }
+    public void Undo() => Travel(_undo,_redo,"ActionUndo");
+    public void Redo() => Travel(_redo,_undo,"ActionRedo");
+    private void Travel(List<(ModuleEditorState State,string Action)> from,List<(ModuleEditorState State,string Action)> to,string action)
+    {
+        if(from.Count==0)return;
+        var item=from[^1]; from.RemoveAt(from.Count-1); to.Add((CopyState(),item.Action));
+        var path=State.OpenedFilePath; Apply(item.State); State.OpenedFilePath=path;
+        State.HasChanges=Signature(State)!=_savedSignature; _actions.Add(action);
+        if(_actions.Count>200)_actions.RemoveAt(0);
+    }
     private string _savedSignature = string.Empty;
     public ModuleEditorState State { get; } = new();
 
@@ -28,6 +49,7 @@ public sealed class ModuleEditorService(IModuleRepository repository, IMissingPi
             _document = document;
             Apply(candidate);
             _savedSignature = Signature(State);
+            _undo.Clear(); _redo.Clear(); _actions.Clear();
             State.HasChanges = false;
             _log.Info($"Module opened: {filePath}");
             return true;
@@ -70,6 +92,7 @@ public sealed class ModuleEditorService(IModuleRepository repository, IMissingPi
     public void UpdateTables(string points, string newScan, string scan)
     {
         if (!State.IsLoaded) return;
+        var before=CopyState();
         State.PointTableData = points;
         State.NewScanABCDCode = newScan;
         State.ScanABCDCode = scan;
@@ -84,16 +107,18 @@ public sealed class ModuleEditorService(IModuleRepository repository, IMissingPi
             State.MissingPixels = "Исправьте данные таблицы.";
         }
         State.HasChanges = Signature(State) != _savedSignature;
+        Remember(before,"ActionEdit");
     }
     public void Rotate(Rotation rotation)
     {
         try
         {
             if (_document is null) throw new InvalidOperationException("Сначала откройте файл модуля.");
+            var before=CopyState();
             var candidate = CopyState();
             rotations.Rotate(candidate, rotation);
             RefreshDerived(candidate);
-            Apply(candidate);
+            Apply(candidate); Remember(before,"ActionRotate");
             _log.Info($"Module rotated: {rotation}; angle={State.RotationDegrees}");
             State.HasChanges = Signature(State) != _savedSignature;
         }

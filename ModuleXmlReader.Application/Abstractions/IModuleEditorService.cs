@@ -7,4 +7,9 @@ public interface IModuleEditorService
     bool Save(string filePath);
     void UpdateTables(string points, string newScan, string scan);
     void Rotate(Rotation rotation);
+    bool CanUndo => false;
+    bool CanRedo => false;
+    IReadOnlyList<string> ActionHistory => Array.Empty<string>();
+    void Undo() { }
+    void Redo() { }
 }

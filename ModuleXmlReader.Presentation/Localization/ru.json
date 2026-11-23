@@ -111,5 +111,12 @@
   "GoPoint": "К точке",
   "PointNotFound": "Номер точки не найден",
   "PreviousMissing": "Предыдущий пропуск",
-  "NextMissing": "Следующий пропуск"
+  "NextMissing": "Следующий пропуск",
+  "Undo": "Отменить (Ctrl+Z)",
+  "Redo": "Повторить (Ctrl+Y)",
+  "ActionHistory": "История действий",
+  "ActionEdit": "Изменение таблицы",
+  "ActionRotate": "Поворот модуля",
+  "ActionUndo": "Отмена действия",
+  "ActionRedo": "Повтор действия"
 }

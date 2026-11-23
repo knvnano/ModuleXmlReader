@@ -10,6 +10,11 @@ public partial class MainWindow : Window
         InitializeComponent();
         AddHandler(KeyDownEvent, (_, e) =>
         {
+            if(DataContext is MainWindowViewModel vm && e.KeyModifiers.HasFlag(global::Avalonia.Input.KeyModifiers.Control) && FocusManager?.GetFocusedElement() is not TextBox)
+            {
+                var command=e.Key==global::Avalonia.Input.Key.Z ? vm.UndoCommand : e.Key==global::Avalonia.Input.Key.Y ? vm.RedoCommand : null;
+                if(command?.CanExecute(null)==true) { command.Execute(null);e.Handled=true;return; }
+            }
             if (e.Key == global::Avalonia.Input.Key.Z && e.KeyModifiers == global::Avalonia.Input.KeyModifiers.None &&
                 FocusManager?.GetFocusedElement() is not TextBox)
             { ModuleCanvas.FitToView(); e.Handled = true; }
