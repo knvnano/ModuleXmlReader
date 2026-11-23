@@ -11,6 +11,7 @@ public sealed class MainWindowViewModel : ObservableObject, IDisposable
 {
     public TextCatalog Text { get; }
     public SimulationViewModel Simulation { get; }
+    public PointNavigationViewModel Navigation { get; }
     private readonly IAppLogger _log;
     private readonly IChangelogReader? _changesReader;
     private readonly ILogReader? _logsReader;
@@ -84,7 +85,7 @@ public sealed class MainWindowViewModel : ObservableObject, IDisposable
         INotificationService notifications, IAboutDialogService about, IUnsavedChangesService unsaved,
         TextCatalog? text = null, IChangelogReader? changes = null, ILogReader? logs = null, IAppLogger? logger = null, IAnimationClock? animationClock = null)
     {
-        Text = text ?? new TextCatalog(); Simulation = new SimulationViewModel(Text, animationClock ?? new ManualAnimationClock()); _log = logger ?? NullAppLogger.Instance;
+        Text = text ?? new TextCatalog(); Navigation = new(Text); Simulation = new SimulationViewModel(Text, animationClock ?? new ManualAnimationClock()); _log = logger ?? NullAppLogger.Instance;
         _changesReader = changes; _logsReader = logs;
         ToggleSidebarCommand = new(() => IsSidebarExpanded = !IsSidebarExpanded);
         ToggleLanguageCommand = new(Text.Toggle);
@@ -179,7 +180,7 @@ public sealed class MainWindowViewModel : ObservableObject, IDisposable
                 "Не найдено пропущенных пикселей." => Text["NoMissing"], _ => state.MissingPixels
             };
             ValidationError = state.ValidationProblem is { } problem ? Text.Format(problem) : state.ValidationError;
-            Preview = state.Preview;
+            Preview = state.Preview; Navigation.Update(Preview,state.PointTableData);
             Simulation.UpdateModel(state.Preview?.Simulation);
             RotationLabel = !state.IsLoaded ? Text["RotationNone"] : state.RotationDegrees is int angle
                 ? Text.Format("Rotation", angle) : Text.Format("RotationRelative", state.RelativeRotationDegrees);

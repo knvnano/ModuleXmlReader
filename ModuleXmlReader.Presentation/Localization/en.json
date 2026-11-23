@@ -107,5 +107,7 @@
   "SimNoAddresses": "No scan addresses are available for animation.",
   "SimLineBias": "This model does not support a nonzero LineBias yet.",
   "SimGroupOrder": "The data group order could not be determined.",
-  "SimUnsupportedMapping": "This mapping needs additional scan rules: simple offsets leave the group bounds."
+  "SimUnsupportedMapping": "This mapping needs additional scan rules: simple offsets leave the group bounds.",
+  "GoPoint": "Go to point",
+  "PointNotFound": "Point number not found"
 }

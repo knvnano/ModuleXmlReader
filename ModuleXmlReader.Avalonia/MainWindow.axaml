@@ -59,8 +59,8 @@
             <Border Grid.Column="2" Classes="card">
               <Grid RowDefinitions="Auto,10,*,Auto,Auto" RowSpacing="4">
                 <Grid ColumnDefinitions="*,Auto"><TextBlock Text="{Binding Text[DataTables]}" FontWeight="SemiBold" VerticalAlignment="Center" /><Button Name="RotateButton" Command="{Binding RotateCommand}" Classes="subtle" Grid.Column="1" ToolTip.Tip="{Binding Text[RotateTip]}"><TextBlock Name="RotationLabelText" Text="{Binding RotationLabel}" /></Button></Grid>
-                <TabControl Grid.Row="2">
-                  <TabItem Header="{Binding Text[PointsTab]}"><TextBox Name="PointTableText" Text="{Binding PointTableData, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
+                <TabControl Name="DataTabs" Grid.Row="2">
+                  <TabItem Header="{Binding Text[PointsTab]}"><TextBox Name="PointTableText" SelectionStart="{Binding Navigation.SelectionStart, Mode=OneWay}" SelectionEnd="{Binding Navigation.SelectionEnd, Mode=OneWay}" Text="{Binding PointTableData, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
                   <TabItem Header="{Binding Text[NewScanTab]}"><TextBox Name="NewScanText" Text="{Binding NewScanABCDCode, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
                   <TabItem Header="{Binding Text[ScanTab]}"><TextBox Name="ScanText" Text="{Binding ScanABCDCode, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
                 </TabControl>
@@ -70,7 +70,7 @@
             </Border>
           </Grid>
           <GridSplitter Grid.Row="3" Height="8" ResizeDirection="Rows" HorizontalAlignment="Stretch" Background="Transparent" />
-          <Border Grid.Row="4" Classes="card" Padding="12"><local:ModuleViewport Name="ModuleCanvas" Simulation="{Binding Simulation}" Data="{Binding Preview}" Text="{Binding Text}" MinHeight="130" /></Border>
+          <Border Grid.Row="4" Classes="card" Padding="12"><local:ModuleViewport Name="ModuleCanvas" Navigation="{Binding Navigation}" Simulation="{Binding Simulation}" Data="{Binding Preview}" Text="{Binding Text}" MinHeight="130" /></Border>
         </Grid>
         <Grid Name="ChangesPage" IsVisible="{Binding IsChangesPage}" RowDefinitions="Auto,18,*">
           <Grid ColumnDefinitions="*,Auto"><TextBlock Text="{Binding Text[ReloadHint]}" Classes="muted" /><Button Grid.Column="1" Content="{Binding Text[Refresh]}" Command="{Binding RefreshChangesCommand}" Classes="subtle" /></Grid>

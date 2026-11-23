@@ -44,6 +44,7 @@ public sealed class ModulePreview : Control
     { base.OnAttachedToVisualTree(e); _attached = true; SetLightTargets(); }
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     { _attached = false; _fadeTimer.Stop(); _fadeWatch.Stop(); _lights.Clear(); base.OnDetachedFromVisualTree(e); }
+    public IReadOnlyList<PreviewPoint> Selection { get; set; } = Array.Empty<PreviewPoint>();
     public TextCatalog Text { get; set; } = new();
     public static readonly StyledProperty<PreviewData?> DataProperty = AvaloniaProperty.Register<ModulePreview, PreviewData?>(nameof(Data));
     public PreviewData? Data { get => GetValue(DataProperty); set => SetValue(DataProperty, value); }
@@ -103,6 +104,8 @@ public sealed class ModulePreview : Control
                     : address.Index.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 DrawLabel(context, label, address.X, address.Y, Brushes.Black);
             }
+        foreach(var p in Selection)
+            context.DrawRectangle(null,new Pen(Brushes.Yellow,Math.Max(2,cell*0.1)),new Rect(p.X*cell,p.Y*cell,cell,cell).Deflate(1));
         // These mark a break in table order at known neighbouring cells, not
         // a guessed physical coordinate of a 255-255 entry. Paint last so a
         // grid line, number or red address cell cannot hide the separator.

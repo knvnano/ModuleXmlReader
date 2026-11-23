@@ -18,6 +18,10 @@ public sealed class ModuleViewport : UserControl
     public ModuleXmlReader.Presentation.ViewModels.SimulationViewModel? Simulation { get => GetValue(SimulationProperty); set => SetValue(SimulationProperty, value); }
     private ModuleXmlReader.Presentation.ViewModels.SimulationViewModel? _simulation;
     private readonly SimulationPanel _simulationPanel = new() { Width = 320, IsVisible = false };
+    public static readonly StyledProperty<ModuleXmlReader.Presentation.ViewModels.PointNavigationViewModel?> NavigationProperty = AvaloniaProperty.Register<ModuleViewport, ModuleXmlReader.Presentation.ViewModels.PointNavigationViewModel?>(nameof(Navigation));
+    public ModuleXmlReader.Presentation.ViewModels.PointNavigationViewModel? Navigation { get => GetValue(NavigationProperty); set => SetValue(NavigationProperty,value); }
+    private ModuleXmlReader.Presentation.ViewModels.PointNavigationViewModel? _navigation;
+    private readonly StackPanel _navigationPanel = new() { Orientation=global::Avalonia.Layout.Orientation.Horizontal, Spacing=6 };
     private TextCatalog? _subscribedText;
     private readonly TextBlock _help = new();
     private readonly Button _fitButton = new();
@@ -45,6 +49,13 @@ public sealed class ModuleViewport : UserControl
         var fit = _fitButton; fit.Classes.Add("subtle"); fit.Margin = new Thickness(0, 0, 8, 0);
         fit.Click += (_, _) => { Focus(); FitToView(); };
         DockPanel.SetDock(fit, global::Avalonia.Controls.Dock.Right); toolbar.Children.Add(fit);
+        var numberBox=new TextBox { Width=80, PlaceholderText="#" };
+        numberBox.Bind(TextBox.TextProperty,new global::Avalonia.Data.Binding("Number") { Mode=global::Avalonia.Data.BindingMode.TwoWay });
+        var go=new Button(); go.Bind(Button.ContentProperty,new global::Avalonia.Data.Binding("Text[GoPoint]")); go.Bind(Button.CommandProperty,new global::Avalonia.Data.Binding("GoCommand"));
+        var error=new TextBlock { Foreground=Brush.Parse("#FF8795"), VerticalAlignment=global::Avalonia.Layout.VerticalAlignment.Center }; error.Bind(TextBlock.TextProperty,new global::Avalonia.Data.Binding("Error"));
+        _navigationPanel.Children.Add(numberBox); _navigationPanel.Children.Add(go); _navigationPanel.Children.Add(error);
+        numberBox.KeyDown+=(_,e)=> { if(e.Key==Key.Enter) { Navigation?.Go();e.Handled=true; } };
+        DockPanel.SetDock(_navigationPanel,global::Avalonia.Controls.Dock.Right); toolbar.Children.Add(_navigationPanel);
         var info = new StackPanel { Spacing = 2 };
         _help.FontSize = 12; _help.Foreground = Brush.Parse("#94A7C2");
         info.Children.Add(_help);
@@ -70,6 +81,12 @@ public sealed class ModuleViewport : UserControl
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
+        if (change.Property == NavigationProperty)
+        {
+            if(_navigation is not null) _navigation.PropertyChanged-=NavigationChanged;
+            _navigation=Navigation; if(_navigation is not null) _navigation.PropertyChanged+=NavigationChanged;
+            _navigationPanel.DataContext=Navigation; _navigationPanel.IsVisible=Navigation is not null; return;
+        }
         if (change.Property == SimulationProperty)
         {
             if (_simulation is not null) _simulation.PropertyChanged -= SimulationChanged;
@@ -90,6 +107,13 @@ public sealed class ModuleViewport : UserControl
         Preview.Data = Data;
         RefreshLanguage();
         if (_fit) ScheduleFit(); else { Scroller.Offset = default; UpdateRulers(); }
+    }
+    private void NavigationChanged(object? sender,System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if(e.PropertyName=="Locations") { Preview.Selection=Navigation?.Locations ?? []; Preview.InvalidateVisual(); }
+        if(e.PropertyName!="RequestVersion" || Navigation?.Locations.FirstOrDefault() is not { } p || Navigation.Locations.Count==0) return;
+        _fit=false; Preview.CellSize=Math.Max(Preview.CellSize,18); UpdateLayout();
+        Scroller.Offset=new Vector((p.X+0.5)*Preview.CellSize-Scroller.Viewport.Width/2,(p.Y+0.5)*Preview.CellSize-Scroller.Viewport.Height/2); UpdateRulers();
     }
     private void SimulationChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => UpdateSimulation();
     private void UpdateSimulation() { Preview.Frame = Simulation?.Frame; Preview.ShowGroups = Simulation?.ShowGroups == true; }
