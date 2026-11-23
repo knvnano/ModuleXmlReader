@@ -28,7 +28,7 @@ public sealed class WorkbenchTests
   vm.ShowEditorCommand.Execute(null);Dispatcher.UIThread.RunJobs();window.UpdateLayout();
   var save=window.FindControl<Button>("SaveButton")!;var point=save.TranslatePoint(default,window);Assert.NotNull(point);Assert.True(point.Value.X+save.Bounds.Width<=window.ClientSize.Width+1);
   var path=Environment.GetEnvironmentVariable("MODULE_READER_WORKBENCH_SCREENSHOT");
-  if(path is not null&&width==1480){using var frame=window.CaptureRenderedFrame();Assert.NotNull(frame);frame.Save(path,PngBitmapEncoderOptions.Default);}
+  if(path is not null&&width==1480){e.State.OpenedFilePath="Samples/128_64_normal.module";text.SetLanguage("en");Dispatcher.UIThread.RunJobs();window.UpdateLayout();using var frame=window.CaptureRenderedFrame();Assert.NotNull(frame);frame.Save(path,PngBitmapEncoderOptions.Default);}
   window.Close();
  }
 }

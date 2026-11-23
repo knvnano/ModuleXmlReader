@@ -57,7 +57,7 @@
   "LogFolder": "Log folder",
   "LogHint": "Showing the latest part of the selected log",
   "ReloadHint": "History is loaded from changelog.json",
-  "AboutText": "Nova XML Reader\nVersion 0.5.0\nDeveloped by @digitalbuddha\nEmail: knv_nano@bk.ru",
+  "AboutText": "Nova XML Reader\nVersion 0.7.0\nDeveloped by @digitalbuddha\nEmail: knv_nano@bk.ru",
   "AboutDescription": "Edit module configurations, inspect scanning traces and save the result.",
   "SaveSuccess": "File saved as {0}",
   "OpenFailed": "Unable to open module: {0}",

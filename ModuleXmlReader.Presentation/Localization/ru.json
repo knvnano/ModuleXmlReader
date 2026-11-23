@@ -57,7 +57,7 @@
   "LogFolder": "Папка журналов",
   "LogHint": "Показана последняя часть выбранного журнала",
   "ReloadHint": "История загружается из changelog.json",
-  "AboutText": "Nova XML Reader\nВерсия 0.5.0\nРазработка: @digitalbuddha\nПочта: knv_nano@bk.ru",
+  "AboutText": "Nova XML Reader\nВерсия 0.7.0\nРазработка: @digitalbuddha\nПочта: knv_nano@bk.ru",
   "AboutDescription": "Редактируйте конфигурации модулей, проверяйте развёртку и сохраняйте результат.",
   "SaveSuccess": "Файл успешно сохранён как {0}",
   "OpenFailed": "Ошибка при загрузке файла: {0}",

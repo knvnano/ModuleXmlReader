@@ -13,7 +13,7 @@ internal static class Program
             "ModuleXmlReader", "Logs", DateTime.UtcNow.ToString("yyyyMMdd-HHmmss") + "-" + Environment.ProcessId);
         using var logger = new Log4NetLogger(LogsDirectory);
         Logger = logger;
-        logger.Info("Application starting; version=0.5.0");
+        logger.Info("Application starting; version="+typeof(Program).Assembly.GetName().Version);
         AppDomain.CurrentDomain.UnhandledException += (_, e) => logger.Error("Unhandled process exception",
             e.ExceptionObject as Exception ?? new Exception(e.ExceptionObject?.ToString()));
         TaskScheduler.UnobservedTaskException += (_, e) => logger.Error("Unobserved task exception", e.Exception);

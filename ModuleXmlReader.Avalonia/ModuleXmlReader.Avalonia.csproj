@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>0.5.0</Version>
+    <Version>0.7.0</Version>
+    <Authors>Nikolay T (knvnano)</Authors>
+    <Description>Layered MVVM editor and diagnostic viewer for LED module XML files.</Description>
+    <RepositoryUrl>https://github.com/knvnano/ModuleXmlReader</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

@@ -3,3 +3,10 @@
 **/TestResults/
 .vs/
 *.user
+
+publish/
+artifacts/
+*.log
+*.zip
+.env
+.env.*
