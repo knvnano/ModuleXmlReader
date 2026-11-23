@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ModuleXmlReader.Presentation.ViewModels"
+             x:Class="ModuleXmlReader.Avalonia.SimulationPanel" x:DataType="vm:SimulationViewModel">
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Spacing="12" Margin="14,0,0,0">
+      <TextBlock Text="{Binding Text[SimTitle]}" FontWeight="SemiBold" FontSize="15" />
+      <TextBlock Text="{Binding Text[SimLogical]}" TextWrapping="Wrap" FontSize="11" Foreground="#94A7C2" />
+      <StackPanel Orientation="Horizontal" Spacing="6">
+        <Button Name="SimulationPlayButton" Content="{Binding PlayLabel}" Command="{Binding PlayPauseCommand}" IsEnabled="{Binding CanSimulate}" Classes="primary" Padding="10,6" />
+        <Button Name="SimulationStepButton" Content="{Binding Text[SimStep]}" Command="{Binding StepCommand}" IsEnabled="{Binding CanSimulate}" Classes="subtle" Padding="10,6" />
+        <Button Content="{Binding Text[SimReset]}" Command="{Binding ResetCommand}" IsEnabled="{Binding CanSimulate}" Padding="10,6" />
+      </StackPanel>
+      <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8"><TextBlock Text="{Binding Text[SimSpeed]}" VerticalAlignment="Center" FontSize="11" /><Slider Grid.Column="1" Minimum="1" Maximum="32" Value="{Binding Speed, Mode=TwoWay}" /><TextBlock Grid.Column="2" Text="{Binding Speed, StringFormat='{}{0:0}'}" VerticalAlignment="Center" /></Grid>
+      <CheckBox Name="SimulationGroupsToggle" Content="{Binding Text[SimShowGroups]}" IsChecked="{Binding ShowGroups, Mode=TwoWay}" />
+      <Border Background="#182C3B" CornerRadius="8" Padding="10"><StackPanel Spacing="5"><TextBlock Text="{Binding PhaseLabel}" Foreground="#65DEC8" FontWeight="SemiBold" /><TextBlock Text="{Binding Status}" TextWrapping="Wrap" FontSize="11" /></StackPanel></Border>
+      <UniformGrid Columns="3">
+        <Border BorderBrush="#344962" BorderThickness="1" CornerRadius="6" Margin="0,0,4,0" Padding="7"><TextBlock Text="{Binding ClockSignal}" HorizontalAlignment="Center" FontFamily="Consolas" /></Border>
+        <Border BorderBrush="#344962" BorderThickness="1" CornerRadius="6" Margin="0,0,4,0" Padding="7"><TextBlock Text="{Binding LatchSignal}" HorizontalAlignment="Center" FontFamily="Consolas" /></Border>
+        <Border BorderBrush="#344962" BorderThickness="1" CornerRadius="6" Padding="7"><TextBlock Text="{Binding OeSignal}" HorizontalAlignment="Center" FontFamily="Consolas" /></Border>
+      </UniformGrid>
+      <TextBlock Text="{Binding Text[SimRegisters]}" TextWrapping="Wrap" FontSize="11" Foreground="#94A7C2" />
+      <ItemsControl ItemsSource="{Binding Groups}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:SimulationGroupViewModel">
+        <StackPanel Spacing="6" Margin="0,0,0,12">
+          <StackPanel Orientation="Horizontal" Spacing="7"><Border Background="{Binding Color}" Width="9" Height="9" CornerRadius="4" /><TextBlock Text="{Binding Name}" FontSize="12" Foreground="{Binding Color}" /></StackPanel>
+          <ItemsControl ItemsSource="{Binding Cells}"><ItemsControl.ItemsPanel><ItemsPanelTemplate><UniformGrid Columns="8" /></ItemsPanelTemplate></ItemsControl.ItemsPanel><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:SimulationRegisterViewModel">
+            <Border Background="{Binding Fill}" CornerRadius="4" Height="27" Margin="0,0,3,0"><TextBlock Text="{Binding Number}" FontSize="10" FontWeight="Bold" Foreground="#07131F" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+          </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+        </StackPanel>
+      </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+      <TextBlock Text="{Binding Text[SimParallel]}" TextWrapping="Wrap" Foreground="#94A7C2" FontSize="11" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

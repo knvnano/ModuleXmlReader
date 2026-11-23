@@ -1,0 +1,98 @@
+[
+  {
+    "version": "0.6.0",
+    "date": "2026-11-23",
+    "titleRu": "Анимация работы модуля",
+    "titleEn": "Module operation animation",
+    "itemsRu": [
+      "Логическая анимация загрузки регистров, CLK/LAT/OE и свечения строк.",
+      "Цветовые области параллельных групп с порядком из DataGroupSequence.",
+      "Пуск, пауза, пошаговый режим, скорость и сброс; пропуски сохраняют такты.",
+      "Плавное зажигание и угасание диодов и строк с послесвечением указателя загрузки."
+    ],
+    "itemsEn": [
+      "Logical animation of shift registers, CLK/LAT/OE and illuminated rows.",
+      "Colored parallel data groups ordered by DataGroupSequence.",
+      "Play, pause, step, speed and reset; missing entries retain their clock slots.",
+      "Smooth LED and row fade-in/fade-out with a fading loading indicator."
+    ]
+  },
+  {
+    "version": "0.5.0",
+    "date": "2026-11-23",
+    "titleRu": "Новый интерфейс и диагностика",
+    "titleEn": "New interface and diagnostics",
+    "itemsRu": [
+      "Тёмная тема, анимированное боковое меню и мгновенный перевод RUS/ENG.",
+      "Раздел истории читает сохранённые записи из changelog.json.",
+      "log4net: раздельные журналы событий, ошибок и диагностики с ротацией.",
+      "Фиолетовые границы соседних точек показывают разрывы трассы даже без координат пропусков."
+    ],
+    "itemsEn": [
+      "Dark theme, animated navigation and instant RUS/ENG switching.",
+      "The changelog reads saved release notes from changelog.json.",
+      "log4net: separate rolling activity, error and diagnostic logs.",
+      "Purple boundaries at adjacent points show trace gaps even when missing-point coordinates are unknown."
+    ]
+  },
+  {
+    "version": "0.4.0",
+    "date": "2026-11-23",
+    "titleRu": "Интерактивная сетка модуля",
+    "titleEn": "Interactive module canvas",
+    "itemsRu": [
+      "Номера точек, линейки и красная линия адресов A–P / 16–31.",
+      "Зум колесом, панорамирование средней кнопкой и вписывание по Z.",
+      "Фиолетовые пропуски; неизвестные координаты не выдумываются.",
+      "Циклическая кнопка поворота с текущим углом."
+    ],
+    "itemsEn": [
+      "Point numbers, rulers and the red A–P / 16–31 address line.",
+      "Wheel zoom, middle-button panning and Z to fit.",
+      "Purple missing points; unknown coordinates are never invented.",
+      "A cyclic rotation button showing the current angle."
+    ]
+  },
+  {
+    "version": "0.3.0",
+    "date": "2026-11-23",
+    "titleRu": "Исправление поворотов и сохранения",
+    "titleEn": "Rotation and save fixes",
+    "itemsRu": [
+      "Повороты проверены по четырём эталонным файлам NovaLCT.",
+      "Транзакционная загрузка, проверка ввода и безопасное сохранение.",
+      "Подтверждение несохранённых изменений при открытии и закрытии."
+    ],
+    "itemsEn": [
+      "Rotations verified against four NovaLCT reference files.",
+      "Transactional loading, validation and safe file saving.",
+      "Unsaved-change confirmation when opening or closing."
+    ]
+  },
+  {
+    "version": "0.2.0",
+    "date": "2026-11-23",
+    "titleRu": "Слоистая MVVM-архитектура",
+    "titleEn": "Layered MVVM architecture",
+    "itemsRu": [
+      "Выделены Domain, Application, Infrastructure, Presentation и Avalonia UI.",
+      "XML, повороты, коды и предпросмотр вынесены в сервисы."
+    ],
+    "itemsEn": [
+      "Separated Domain, Application, Infrastructure, Presentation and Avalonia UI.",
+      "Extracted XML, rotation, scan-code and preview services."
+    ]
+  },
+  {
+    "version": "0.1.0",
+    "date": "2026-11-23",
+    "titleRu": "Перенос на Avalonia",
+    "titleEn": "Avalonia migration",
+    "itemsRu": [
+      "Создано отдельное Avalonia-приложение с переносом функций WinForms."
+    ],
+    "itemsEn": [
+      "Created a separate Avalonia application carrying over the WinForms features."
+    ]
+  }
+]

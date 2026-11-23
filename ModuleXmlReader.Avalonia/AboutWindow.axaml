@@ -1,0 +1,10 @@
+<Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ModuleXmlReader.Presentation.ViewModels"
+        x:Class="ModuleXmlReader.Avalonia.AboutWindow" x:DataType="vm:AboutViewModel"
+        Title="{Binding Text[About]}" Width="500" SizeToContent="Height" CanResize="False" WindowStartupLocation="CenterOwner">
+  <StackPanel Margin="28" Spacing="20">
+    <TextBlock Text="Nova XML Reader" FontSize="25" FontWeight="SemiBold" Foreground="#65DEC8" />
+    <TextBlock Text="{Binding AboutText}" LineHeight="24" />
+    <StackPanel Orientation="Horizontal" Spacing="10"><Button Content="Telegram" Command="{Binding TelegramCommand}" Classes="primary" /><Button Content="{Binding Text[Close]}" IsCancel="True" Command="{Binding CloseCommand}" /></StackPanel>
+  </StackPanel>
+</Window>

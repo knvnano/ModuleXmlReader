@@ -1,0 +1,46 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleXmlReader.Avalonia", "ModuleXmlReader.Avalonia\ModuleXmlReader.Avalonia.csproj", "{7BF8CA80-B4D3-445F-9F3B-BC2D1EF0D144}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleXmlReader.CharacterizationTests", "ModuleXmlReader.CharacterizationTests\ModuleXmlReader.CharacterizationTests.csproj", "{41B2D94A-B2C5-4533-9C47-CC596DF4B733}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleXmlReader.Domain", "ModuleXmlReader.Domain\ModuleXmlReader.Domain.csproj", "{9BA92E4A-4125-5776-B5F6-18F532F9D664}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleXmlReader.Application", "ModuleXmlReader.Application\ModuleXmlReader.Application.csproj", "{4FA478A4-D4CC-502F-A3AC-59357FE2270A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleXmlReader.Infrastructure", "ModuleXmlReader.Infrastructure\ModuleXmlReader.Infrastructure.csproj", "{551FE14E-DD2E-569A-B505-02E3DA404888}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleXmlReader.Presentation", "ModuleXmlReader.Presentation\ModuleXmlReader.Presentation.csproj", "{EBC2BCA4-1080-577D-B8D9-69FB55F2A20D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BA92E4A-4125-5776-B5F6-18F532F9D664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BA92E4A-4125-5776-B5F6-18F532F9D664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BA92E4A-4125-5776-B5F6-18F532F9D664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BA92E4A-4125-5776-B5F6-18F532F9D664}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FA478A4-D4CC-502F-A3AC-59357FE2270A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FA478A4-D4CC-502F-A3AC-59357FE2270A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FA478A4-D4CC-502F-A3AC-59357FE2270A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FA478A4-D4CC-502F-A3AC-59357FE2270A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{551FE14E-DD2E-569A-B505-02E3DA404888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{551FE14E-DD2E-569A-B505-02E3DA404888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{551FE14E-DD2E-569A-B505-02E3DA404888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{551FE14E-DD2E-569A-B505-02E3DA404888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBC2BCA4-1080-577D-B8D9-69FB55F2A20D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBC2BCA4-1080-577D-B8D9-69FB55F2A20D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBC2BCA4-1080-577D-B8D9-69FB55F2A20D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBC2BCA4-1080-577D-B8D9-69FB55F2A20D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BF8CA80-B4D3-445F-9F3B-BC2D1EF0D144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BF8CA80-B4D3-445F-9F3B-BC2D1EF0D144}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BF8CA80-B4D3-445F-9F3B-BC2D1EF0D144}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BF8CA80-B4D3-445F-9F3B-BC2D1EF0D144}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41B2D94A-B2C5-4533-9C47-CC596DF4B733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41B2D94A-B2C5-4533-9C47-CC596DF4B733}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41B2D94A-B2C5-4533-9C47-CC596DF4B733}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41B2D94A-B2C5-4533-9C47-CC596DF4B733}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
