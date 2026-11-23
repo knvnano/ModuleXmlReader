@@ -11,6 +11,14 @@ public sealed class ScanCodeService : IScanCodeService
             CultureInfo.InvariantCulture, out var value) ? (int)value :
             throw Messages.Format("ScanByte", $"{fieldName}: значение {i + 1} должно быть числом от 0 до 255." , fieldName, i + 1)).ToArray();
     }
+    public string MoveActive(string code,int index,int offset,int activeLength,string fieldName)
+    {
+        var values=Parse(code,fieldName);
+        if(activeLength<0||activeLength>values.Length||index<0||index>=activeLength||index+offset<0||index+offset>=activeLength||Math.Abs(offset)!=1)
+            throw new ArgumentOutOfRangeException(nameof(index));
+        (values[index],values[index+offset])=(values[index+offset],values[index]);
+        return string.Join("-",values);
+    }
     public string ReversePrefix(string code, int activeLength, string fieldName)
     {
         var values = Parse(code, fieldName);

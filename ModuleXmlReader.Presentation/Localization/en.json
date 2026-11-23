@@ -140,5 +140,7 @@
   "DiagDuplicate": "Points {0} and {1} have identical coordinates",
   "TraceMode": "Trace traversal and direction arrows",
   "TraceStatus": "Trace point {0} / {1}. Missing entries retain their positions.",
-  "AllGroups": "All data groups"
+  "AllGroups": "All data groups",
+  "ActiveCode": "Active address",
+  "PaddingCode": "Padding"
 }
