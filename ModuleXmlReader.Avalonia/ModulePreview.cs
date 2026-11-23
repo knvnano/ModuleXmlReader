@@ -44,6 +44,8 @@ public sealed class ModulePreview : Control
     { base.OnAttachedToVisualTree(e); _attached = true; SetLightTargets(); }
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     { _attached = false; _fadeTimer.Stop(); _fadeWatch.Stop(); _lights.Clear(); base.OnDetachedFromVisualTree(e); }
+    public bool TraceMode { get; set; }
+    public int TraceNumber { get; set; }
     public event Action<int>? PixelClicked;
     protected override void OnPointerPressed(global::Avalonia.Input.PointerPressedEventArgs e)
     {
@@ -94,7 +96,7 @@ public sealed class ModulePreview : Control
             for (int x = 0; x <= data.Cols; x++) context.DrawLine(pen, new Point(x * cell, 0), new Point(x * cell, Height));
             for (int y = 0; y <= data.Rows; y++) context.DrawLine(pen, new Point(0, y * cell), new Point(Width, y * cell));
         }
-        DrawSimulation(context, data);
+        DrawSimulation(context, data); DrawTrace(context,data);
         if (cell >= 10 && data.Pixels is { } numbered)
         {
             var addresses = data.ScanLine?.Select(p => (p.X, p.Y)).ToHashSet() ?? [];
@@ -118,6 +120,29 @@ public sealed class ModulePreview : Control
         // grid line, number or red address cell cannot hide the separator.
         if (data.GapMarkers is { } gaps)
             foreach (var gap in gaps) context.FillRectangle(MissingBrush, GapRectangle(gap));
+    }
+    private void DrawTrace(DrawingContext context,PreviewData data)
+    {
+        if(!TraceMode || data.Simulation is not { } model)return;
+        double c=CellSize;
+        foreach(var group in model.Groups)
+        {
+            var brush=Brush.Parse(ModuleXmlReader.Presentation.ViewModels.SimulationGroupViewModel.ColorFor(group.InputId));
+            for(int i=1;i<model.Points.Count;i++)
+            {
+                var a=model.Points[i-1];var b=model.Points[i]; if(a.IsMissing||b.IsMissing||c<8)continue;
+                var start=new Point((group.X+a.X+0.5)*c,(group.Y+a.Y+0.5)*c);var end=new Point((group.X+b.X+0.5)*c,(group.Y+b.Y+0.5)*c);
+                var delta=new Vector(end.X-start.X,end.Y-start.Y);if(delta.Length<0.1)continue;var unit=delta/delta.Length;var tip=start+delta*0.72;
+                var pen=new Pen(brush,Math.Max(1,c*0.04));context.DrawLine(pen,start,end);
+                context.DrawLine(pen,tip,tip-unit*(c*0.22)+new Vector(-unit.Y,unit.X)*(c*0.13));
+                context.DrawLine(pen,tip,tip-unit*(c*0.22)-new Vector(-unit.Y,unit.X)*(c*0.13));
+            }
+            if(TraceNumber>0 && TraceNumber<=model.Points.Count && !model.Points[TraceNumber-1].IsMissing)
+            {
+                var p=model.Points[TraceNumber-1];var rect=new Rect((group.X+p.X)*c,(group.Y+p.Y)*c,c,c);
+                context.FillRectangle(new SolidColorBrush(Colors.White,0.25),rect);context.DrawRectangle(null,new Pen(Brushes.Yellow,2),rect.Deflate(1));
+            }
+        }
     }
     private void DrawSimulation(DrawingContext context, PreviewData data)
     {
@@ -177,7 +202,7 @@ public sealed class ModulePreview : Control
                 if (GapRectangle(gap).Contains(position))
                 {
                     string range = gap.Count == 1 ? gap.FirstMissing.ToString(System.Globalization.CultureInfo.InvariantCulture)
-                        : $"{gap.FirstMissing}вЂ“{gap.FirstMissing + gap.Count - 1}";
+                        : $"{gap.FirstMissing}РІР‚вЂњ{gap.FirstMissing + gap.Count - 1}";
                     ToolTip.SetTip(this, Text.Format("GapTip", range));
                     return;
                 }

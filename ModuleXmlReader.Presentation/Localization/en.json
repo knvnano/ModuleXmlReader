@@ -137,5 +137,7 @@
   "DiagByte": "Point {0}: coordinates must be bytes",
   "DiagHalfMissing": "Point {0}: a missing entry must be 255-255",
   "DiagMissing": "Missing point {0}",
-  "DiagDuplicate": "Points {0} and {1} have identical coordinates"
+  "DiagDuplicate": "Points {0} and {1} have identical coordinates",
+  "TraceMode": "Trace traversal and direction arrows",
+  "TraceStatus": "Trace point {0} / {1}. Missing entries retain their positions."
 }

@@ -118,7 +118,7 @@ public sealed class ModuleViewport : UserControl
         Scroller.Offset=new Vector((p.X+0.5)*Preview.CellSize-Scroller.Viewport.Width/2,(p.Y+0.5)*Preview.CellSize-Scroller.Viewport.Height/2); UpdateRulers();
     }
     private void SimulationChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => UpdateSimulation();
-    private void UpdateSimulation() { Preview.Frame = Simulation?.Frame; Preview.ShowGroups = Simulation?.ShowGroups == true; }
+    private void UpdateSimulation() { Preview.Frame = Simulation?.Frame; Preview.ShowGroups = Simulation?.ShowGroups == true; Preview.TraceMode=Simulation?.TraceMode==true; Preview.TraceNumber=Simulation?.TraceNumber??0; Preview.InvalidateVisual(); }
     private void LanguageChanged(object? sender, EventArgs e) => RefreshLanguage();
     private void RefreshLanguage()
     {
