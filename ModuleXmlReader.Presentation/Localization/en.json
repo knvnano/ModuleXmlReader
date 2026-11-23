@@ -156,5 +156,8 @@
   "BatchValid": "Validated; diagnostic findings: {0}",
   "BatchWritten": "Variant saved",
   "BatchFailed": "Error: {0}",
-  "BatchEmpty": "No .module files found"
+  "BatchEmpty": "No .module files found",
+  "Export": "Export",
+  "ExportReport": "Module report",
+  "ExportDone": "Export saved: {0}"
 }

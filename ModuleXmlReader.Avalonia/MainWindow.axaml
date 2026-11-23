@@ -39,6 +39,7 @@
           <Button Content="↷" ToolTip.Tip="{Binding Text[Redo]}" Command="{Binding RedoCommand}" Classes="subtle" />
           <Button Name="LanguageButton" Content="{Binding LanguageButtonText}" Command="{Binding ToggleLanguageCommand}" Classes="subtle" />
           <Button Name="OpenButton" Content="{Binding Text[Open]}" Command="{Binding OpenCommand}" Classes="subtle" />
+          <Button Content="{Binding Text[Export]}" Command="{Binding ExportCommand}" Classes="subtle" />
           <Button Name="SaveButton" Content="{Binding Text[Save]}" Command="{Binding SaveCommand}" Classes="primary" />
         </StackPanel>
       </Grid>

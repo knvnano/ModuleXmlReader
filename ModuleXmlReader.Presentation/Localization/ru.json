@@ -156,5 +156,8 @@
   "BatchValid": "Проверено, диагностических записей: {0}",
   "BatchWritten": "Вариант сохранён",
   "BatchFailed": "Ошибка: {0}",
-  "BatchEmpty": "Файлы .module не найдены"
+  "BatchEmpty": "Файлы .module не найдены",
+  "Export": "Экспорт",
+  "ExportReport": "Отчёт о модуле",
+  "ExportDone": "Экспорт сохранён: {0}"
 }

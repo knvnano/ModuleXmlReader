@@ -87,7 +87,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     public MainWindowViewModel(IModuleEditorService editor, IFileDialogService files,
         INotificationService notifications, IAboutDialogService about, IUnsavedChangesService unsaved,
-        TextCatalog? text = null, IChangelogReader? changes = null, ILogReader? logs = null, IAppLogger? logger = null, IAnimationClock? animationClock = null, IModuleComparisonService? comparison = null, ISaveReviewService? saveReview = null, IModuleBatchService? batch = null, IFolderDialogService? folders = null)
+        TextCatalog? text = null, IChangelogReader? changes = null, ILogReader? logs = null, IAppLogger? logger = null, IAnimationClock? animationClock = null, IModuleComparisonService? comparison = null, ISaveReviewService? saveReview = null, IModuleBatchService? batch = null, IFolderDialogService? folders = null, IModuleExportWriter? exportWriter = null)
     {
         Text = text ?? new TextCatalog(); Navigation = new(Text);
         Navigation.PropertyChanged+=(_,e)=> { if(e.PropertyName==nameof(Navigation.RequestVersion)) SelectedCoordinate=Coordinates.FirstOrDefault(p=>p.Number==Navigation.SelectedNumber); }; Simulation = new SimulationViewModel(Text, animationClock ?? new ManualAnimationClock()); _log = logger ?? NullAppLogger.Instance;
@@ -104,6 +104,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         ErrorLogsCommand = new(() => SelectLogsAsync(LogKind.Errors), () => !IsBusy);
         DiagnosticLogsCommand = new(() => SelectLogsAsync(LogKind.Diagnostics), () => !IsBusy);
         Text.LanguageChanged += LanguageChanged;
+        _exportWriter=exportWriter; ExportCommand=new(()=>GuardAsync(ExportAsync),()=>CanChangeDocument&&_exportWriter is not null);
         _batch=batch; _folders=folders;
         BatchValidateCommand=new(()=>GuardAsync(()=>RunBatchAsync(false)),()=>!IsBusy&&_batch is not null);
         BatchVariantsCommand=new(()=>GuardAsync(()=>RunBatchAsync(true)),()=>!IsBusy&&_batch is not null);
@@ -208,7 +209,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     {
         // Raise the derived read-only property as busy/load state changes.
         OnEditorReadOnlyChanged();
-        foreach (var command in new[] { BatchValidateCommand, BatchVariantsCommand, CompareCommand, UndoCommand, RedoCommand, OpenCommand, SaveCommand, RotateCommand, AboutCommand, ShowChangesCommand, ShowLogsCommand, RefreshChangesCommand, RefreshLogsCommand, ActivityLogsCommand, ErrorLogsCommand, DiagnosticLogsCommand })
+        foreach (var command in new[] { ExportCommand, BatchValidateCommand, BatchVariantsCommand, CompareCommand, UndoCommand, RedoCommand, OpenCommand, SaveCommand, RotateCommand, AboutCommand, ShowChangesCommand, ShowLogsCommand, RefreshChangesCommand, RefreshLogsCommand, ActivityLogsCommand, ErrorLogsCommand, DiagnosticLogsCommand })
             command.RaiseCanExecuteChanged();
     }
     private void OnEditorReadOnlyChanged() => RaisePropertyChanged(nameof(IsEditorReadOnly));
