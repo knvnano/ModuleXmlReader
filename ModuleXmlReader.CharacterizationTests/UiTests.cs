@@ -60,6 +60,7 @@ public sealed class UiTests
         button.Command!.Execute(null); Dispatcher.UIThread.RunJobs();
         Assert.Equal("Поворот: 180°", window.FindControl<TextBlock>("RotationLabelText")!.Text);
         Assert.StartsWith("127-31", text.Text); Assert.Same(editor.State.Preview, preview.Data);
+        window.FindControl<TabControl>("DataTabs")!.SelectedIndex=1; Dispatcher.UIThread.RunJobs();
         window.UpdateLayout();
         var buttonPosition = button.TranslatePoint(default, window);
         Assert.NotNull(buttonPosition);

@@ -44,6 +44,13 @@ public sealed class ModulePreview : Control
     { base.OnAttachedToVisualTree(e); _attached = true; SetLightTargets(); }
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     { _attached = false; _fadeTimer.Stop(); _fadeWatch.Stop(); _lights.Clear(); base.OnDetachedFromVisualTree(e); }
+    public event Action<int>? PixelClicked;
+    protected override void OnPointerPressed(global::Avalonia.Input.PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e); if(!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)return;
+        var pos=e.GetPosition(this); int x=(int)(pos.X/CellSize),y=(int)(pos.Y/CellSize);
+        if(Data?.Pixels?.FirstOrDefault(p=>p.X==x&&p.Y==y) is { Number:>0 } point) PixelClicked?.Invoke(point.Number);
+    }
     public IReadOnlyList<PreviewPoint> Selection { get; set; } = Array.Empty<PreviewPoint>();
     public TextCatalog Text { get; set; } = new();
     public static readonly StyledProperty<PreviewData?> DataProperty = AvaloniaProperty.Register<ModulePreview, PreviewData?>(nameof(Data));

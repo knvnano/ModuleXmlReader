@@ -124,5 +124,10 @@
   "DiffParameter": "Parameter",
   "DiffPoint": "Coordinate",
   "DiffMissing": "Missing point",
-  "DiffCode": "Code"
+  "DiffCode": "Code",
+  "Coordinates": "Coordinates",
+  "State": "State",
+  "Apply": "Apply",
+  "CoordinateValid": "Coordinate",
+  "CoordinateInvalid": "Invalid coordinate"
 }

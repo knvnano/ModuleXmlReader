@@ -68,6 +68,7 @@ public sealed class ModuleViewport : UserControl
         Grid.SetRow(_left, 1); grid.Children.Add(_left);
         Grid.SetRow(Scroller, 1); Grid.SetColumn(Scroller, 1); grid.Children.Add(Scroller);
         Content = root;
+        Preview.PixelClicked+=number=>Navigation?.Select(number);
         Preview.Text = Text; RefreshLanguage();
         Scroller.ScrollChanged += (_, _) => UpdateRulers();
         Scroller.SizeChanged += (_, _) => { if (_fit) ScheduleFit(); };
@@ -100,7 +101,8 @@ public sealed class ModuleViewport : UserControl
             if (_subscribedText is not null) _subscribedText.LanguageChanged -= LanguageChanged;
             _subscribedText = Text;
             if (_subscribedText is not null) _subscribedText.LanguageChanged += LanguageChanged;
-            Preview.Text = Text; RefreshLanguage();
+            Preview.PixelClicked+=number=>Navigation?.Select(number);
+        Preview.Text = Text; RefreshLanguage();
             return;
         }
         if (change.Property != DataProperty) return;

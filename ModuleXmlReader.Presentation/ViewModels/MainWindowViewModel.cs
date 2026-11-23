@@ -88,7 +88,8 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         INotificationService notifications, IAboutDialogService about, IUnsavedChangesService unsaved,
         TextCatalog? text = null, IChangelogReader? changes = null, ILogReader? logs = null, IAppLogger? logger = null, IAnimationClock? animationClock = null, IModuleComparisonService? comparison = null)
     {
-        Text = text ?? new TextCatalog(); Navigation = new(Text); Simulation = new SimulationViewModel(Text, animationClock ?? new ManualAnimationClock()); _log = logger ?? NullAppLogger.Instance;
+        Text = text ?? new TextCatalog(); Navigation = new(Text);
+        Navigation.PropertyChanged+=(_,e)=> { if(e.PropertyName==nameof(Navigation.RequestVersion)) SelectedCoordinate=Coordinates.FirstOrDefault(p=>p.Number==Navigation.SelectedNumber); }; Simulation = new SimulationViewModel(Text, animationClock ?? new ManualAnimationClock()); _log = logger ?? NullAppLogger.Instance;
         _changesReader = changes; _logsReader = logs;
         ToggleSidebarCommand = new(() => IsSidebarExpanded = !IsSidebarExpanded);
         ToggleLanguageCommand = new(Text.Toggle);
@@ -188,7 +189,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
             };
             ValidationError = state.ValidationProblem is { } problem ? Text.Format(problem) : state.ValidationError;
             Preview = state.Preview; RefreshComparison(); Navigation.Update(Preview,state.PointTableData);
-            Simulation.UpdateModel(state.Preview?.Simulation);
+            Simulation.UpdateModel(state.Preview?.Simulation); RefreshCoordinates();
             RotationLabel = !state.IsLoaded ? Text["RotationNone"] : state.RotationDegrees is int angle
                 ? Text.Format("Rotation", angle) : Text.Format("RotationRelative", state.RelativeRotationDegrees);
             IsLoaded = state.IsLoaded; HasChanges = state.HasChanges; OpenedFilePath = state.OpenedFilePath; RaisePropertyChanged(nameof(FileStatus));

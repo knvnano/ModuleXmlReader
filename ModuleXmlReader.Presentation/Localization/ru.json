@@ -124,5 +124,10 @@
   "DiffParameter": "Параметр",
   "DiffPoint": "Координата",
   "DiffMissing": "Пропуск",
-  "DiffCode": "Код"
+  "DiffCode": "Код",
+  "Coordinates": "Координаты",
+  "State": "Состояние",
+  "Apply": "Применить",
+  "CoordinateValid": "Координата",
+  "CoordinateInvalid": "Неверная координата"
 }
