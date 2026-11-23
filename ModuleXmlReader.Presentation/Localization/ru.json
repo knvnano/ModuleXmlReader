@@ -118,5 +118,11 @@
   "ActionEdit": "Изменение таблицы",
   "ActionRotate": "Поворот модуля",
   "ActionUndo": "Отмена действия",
-  "ActionRedo": "Повтор действия"
+  "ActionRedo": "Повтор действия",
+  "Compare": "Сравнение",
+  "CompareFile": "Выбрать эталонный файл",
+  "DiffParameter": "Параметр",
+  "DiffPoint": "Координата",
+  "DiffMissing": "Пропуск",
+  "DiffCode": "Код"
 }

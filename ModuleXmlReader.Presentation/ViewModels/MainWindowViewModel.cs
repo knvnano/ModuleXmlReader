@@ -7,7 +7,7 @@ using ModuleXmlReader.Presentation.Commands;
 using ModuleXmlReader.Presentation.Services;
 namespace ModuleXmlReader.Presentation.ViewModels;
 
-public sealed class MainWindowViewModel : ObservableObject, IDisposable
+public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 {
     public TextCatalog Text { get; }
     public SimulationViewModel Simulation { get; }
@@ -86,7 +86,7 @@ public sealed class MainWindowViewModel : ObservableObject, IDisposable
 
     public MainWindowViewModel(IModuleEditorService editor, IFileDialogService files,
         INotificationService notifications, IAboutDialogService about, IUnsavedChangesService unsaved,
-        TextCatalog? text = null, IChangelogReader? changes = null, ILogReader? logs = null, IAppLogger? logger = null, IAnimationClock? animationClock = null)
+        TextCatalog? text = null, IChangelogReader? changes = null, ILogReader? logs = null, IAppLogger? logger = null, IAnimationClock? animationClock = null, IModuleComparisonService? comparison = null)
     {
         Text = text ?? new TextCatalog(); Navigation = new(Text); Simulation = new SimulationViewModel(Text, animationClock ?? new ManualAnimationClock()); _log = logger ?? NullAppLogger.Instance;
         _changesReader = changes; _logsReader = logs;
@@ -102,6 +102,8 @@ public sealed class MainWindowViewModel : ObservableObject, IDisposable
         ErrorLogsCommand = new(() => SelectLogsAsync(LogKind.Errors), () => !IsBusy);
         DiagnosticLogsCommand = new(() => SelectLogsAsync(LogKind.Diagnostics), () => !IsBusy);
         Text.LanguageChanged += LanguageChanged;
+        _comparison = comparison;
+        CompareCommand = new(()=>GuardAsync(CompareAsync),()=>!IsBusy && IsLoaded && _comparison is not null);
         _editor = editor; _files = files; _notifications = notifications; _unsaved = unsaved;
         Parameters = Array.AsReadOnly(ModuleParameters.Names.Select(name => new ParameterViewModel(name, editor.State.Parameters[name])).ToArray());
         UndoCommand=new(()=>GuardAsync(()=> { _editor.Undo();return Task.CompletedTask; }),()=>!IsBusy && _editor.CanUndo);
@@ -185,7 +187,7 @@ public sealed class MainWindowViewModel : ObservableObject, IDisposable
                 "Не найдено пропущенных пикселей." => Text["NoMissing"], _ => state.MissingPixels
             };
             ValidationError = state.ValidationProblem is { } problem ? Text.Format(problem) : state.ValidationError;
-            Preview = state.Preview; Navigation.Update(Preview,state.PointTableData);
+            Preview = state.Preview; RefreshComparison(); Navigation.Update(Preview,state.PointTableData);
             Simulation.UpdateModel(state.Preview?.Simulation);
             RotationLabel = !state.IsLoaded ? Text["RotationNone"] : state.RotationDegrees is int angle
                 ? Text.Format("Rotation", angle) : Text.Format("RotationRelative", state.RelativeRotationDegrees);
@@ -199,7 +201,7 @@ public sealed class MainWindowViewModel : ObservableObject, IDisposable
     {
         // Raise the derived read-only property as busy/load state changes.
         OnEditorReadOnlyChanged();
-        foreach (var command in new[] { UndoCommand, RedoCommand, OpenCommand, SaveCommand, RotateCommand, AboutCommand, ShowChangesCommand, ShowLogsCommand, RefreshChangesCommand, RefreshLogsCommand, ActivityLogsCommand, ErrorLogsCommand, DiagnosticLogsCommand })
+        foreach (var command in new[] { CompareCommand, UndoCommand, RedoCommand, OpenCommand, SaveCommand, RotateCommand, AboutCommand, ShowChangesCommand, ShowLogsCommand, RefreshChangesCommand, RefreshLogsCommand, ActivityLogsCommand, ErrorLogsCommand, DiagnosticLogsCommand })
             command.RaiseCanExecuteChanged();
     }
     private void OnEditorReadOnlyChanged() => RaisePropertyChanged(nameof(IsEditorReadOnly));

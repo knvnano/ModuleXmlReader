@@ -118,5 +118,11 @@
   "ActionEdit": "Edit table",
   "ActionRotate": "Rotate module",
   "ActionUndo": "Undo action",
-  "ActionRedo": "Redo action"
+  "ActionRedo": "Redo action",
+  "Compare": "Compare",
+  "CompareFile": "Choose reference file",
+  "DiffParameter": "Parameter",
+  "DiffPoint": "Coordinate",
+  "DiffMissing": "Missing point",
+  "DiffCode": "Code"
 }

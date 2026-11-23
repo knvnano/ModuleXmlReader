@@ -64,6 +64,10 @@
                 <TabControl Name="DataTabs" Grid.Row="2">
                   <TabItem Header="{Binding Text[PointsTab]}"><TextBox Name="PointTableText" SelectionStart="{Binding Navigation.SelectionStart, Mode=OneWay}" SelectionEnd="{Binding Navigation.SelectionEnd, Mode=OneWay}" Text="{Binding PointTableData, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
                   <TabItem Header="{Binding Text[NewScanTab]}"><TextBox Name="NewScanText" Text="{Binding NewScanABCDCode, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
+                  <TabItem Header="{Binding Text[Compare]}"><Grid RowDefinitions="Auto,*" RowSpacing="6">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><Button Content="{Binding Text[CompareFile]}" Command="{Binding CompareCommand}" /><TextBlock Text="{Binding ComparisonPath}" Classes="caption" VerticalAlignment="Center" /></StackPanel>
+                    <ScrollViewer Grid.Row="1"><ItemsControl ItemsSource="{Binding Differences}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:DifferenceViewModel"><Grid ColumnDefinitions="100,140,*,*" ColumnSpacing="8" Margin="0,3"><TextBlock Text="{Binding Category}" TextWrapping="Wrap" /><TextBlock Grid.Column="1" Text="{Binding Name}" TextWrapping="Wrap" /><TextBlock Grid.Column="2" Text="{Binding Before}" Foreground="#FF8795" TextWrapping="Wrap" /><TextBlock Grid.Column="3" Text="{Binding After}" Foreground="#65DEC8" TextWrapping="Wrap" /></Grid></DataTemplate></ItemsControl.ItemTemplate></ItemsControl></ScrollViewer>
+                  </Grid></TabItem>
                   <TabItem Header="{Binding Text[ActionHistory]}"><TextBox Text="{Binding ActionHistory}" IsReadOnly="True" AcceptsReturn="True" Classes="code" /></TabItem>
                   <TabItem Header="{Binding Text[ScanTab]}"><TextBox Name="ScanText" Text="{Binding ScanABCDCode, Mode=TwoWay}" IsReadOnly="{Binding IsEditorReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" Classes="code" /></TabItem>
                 </TabControl>
