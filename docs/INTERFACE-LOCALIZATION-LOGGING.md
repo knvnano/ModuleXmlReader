@@ -13,9 +13,9 @@
 
 Снимки:
 
-- [Редактор RU](dark-shell-en.ru.png)
-- [Редактор EN](dark-shell-en.png)
-- [История изменений](dark-shell-en.changelog.png)
+- [Редактор RU](screenshots/editor.png)
+- [Редактор EN](screenshots/editor.png)
+- [История изменений](screenshots/editor.png)
 
 ## Мгновенный перевод
 
