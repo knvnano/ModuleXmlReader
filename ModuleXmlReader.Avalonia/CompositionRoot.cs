@@ -22,7 +22,8 @@ public static class CompositionRoot
         var text = new TextCatalog();
         var dialogs = new AvaloniaDialogService(window, new ExternalLinkService(), text, logger);
         window.DataContext = new MainWindowViewModel(editor, dialogs, dialogs, dialogs, dialogs, text,
-            new JsonChangelogReader(Path.Combine(AppContext.BaseDirectory, "changelog.json")), logs, logger, new DispatcherAnimationClock(), new ModuleComparisonService(new XmlModuleRepository(new XmlModuleSerializer())), dialogs);
+            new JsonChangelogReader(Path.Combine(AppContext.BaseDirectory, "changelog.json")), logs, logger, new DispatcherAnimationClock(), new ModuleComparisonService(new XmlModuleRepository(new XmlModuleSerializer())), dialogs,
+            new ModuleBatchService(()=>new ModuleEditorService(new XmlModuleRepository(new XmlModuleSerializer()),new MissingPixelService(parser),new ModuleRotationService(parser,scan,validation),validation,new PreviewService(),logger)),dialogs);
         window.Closed += (_, _) => ((MainWindowViewModel)window.DataContext!).Dispose();
         return window;
     }

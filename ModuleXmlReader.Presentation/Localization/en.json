@@ -145,5 +145,16 @@
   "PaddingCode": "Padding",
   "SaveReviewTitle": "Review before saving",
   "SaveReviewSummary": "Changed parameters: {0}\nAffected points: {1}\nNew missing points: {2}\nTotal differences: {3}",
-  "DetailedComparison": "Detailed comparison"
+  "DetailedComparison": "Detailed comparison",
+  "Batch": "Batch processing",
+  "BatchValidate": "Validate folder",
+  "BatchVariants": "Variants +0/+90/+180/+270°",
+  "InputFolder": "Source module folder",
+  "OutputFolder": "Output folder",
+  "BatchCancelled": "Cancelled",
+  "BatchErrors": "Validation errors: {0}",
+  "BatchValid": "Validated; diagnostic findings: {0}",
+  "BatchWritten": "Variant saved",
+  "BatchFailed": "Error: {0}",
+  "BatchEmpty": "No .module files found"
 }

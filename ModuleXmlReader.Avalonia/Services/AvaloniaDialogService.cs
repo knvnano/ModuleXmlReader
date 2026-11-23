@@ -8,7 +8,7 @@ using ModuleXmlReader.Presentation.ViewModels;
 namespace ModuleXmlReader.Avalonia.Services;
 
 public sealed partial class AvaloniaDialogService(Window owner, IExternalLinkService links, TextCatalog? catalog = null, IAppLogger? logger = null)
-    : IFileDialogService, INotificationService, IAboutDialogService, IUnsavedChangesService, ISaveReviewService
+    : IFileDialogService, INotificationService, IAboutDialogService, IUnsavedChangesService, ISaveReviewService, IFolderDialogService
 {
     private readonly TextCatalog _text = catalog ?? new TextCatalog();
     private FilePickerFileType ModuleType => new(_text["ModuleFiles"])
@@ -28,6 +28,11 @@ public sealed partial class AvaloniaDialogService(Window owner, IExternalLinkSer
             DefaultExtension = "module", FileTypeChoices = new[] { ModuleType }, ShowOverwritePrompt = true
         });
         return file?.Path.LocalPath;
+    }
+    public async Task<string?> PickFolderAsync(bool output)
+    {
+        var folders=await owner.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions {Title=_text[output?"OutputFolder":"InputFolder"],AllowMultiple=false});
+        return folders.Count==0?null:folders[0].Path.LocalPath;
     }
     public Task ShowAsync(string text, string title) => MessageDialog.Show(owner, new Notice(text, title), _text);
     public Task ShowAsync(Notice notice) => MessageDialog.Show(owner, notice, _text);
