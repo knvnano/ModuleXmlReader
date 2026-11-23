@@ -12,15 +12,16 @@ public sealed class ModuleExportService
   Rect(0,0,data.Cols*cell,data.Rows*cell,"#263247");
   foreach(var p in data.Points)Rect(p.X*cell,p.Y*cell,cell,cell,"#37C49B");
   foreach(var p in data.Pixels??Array.Empty<PreviewPixel>())if(p.IsMissing)Rect(p.X*cell,p.Y*cell,cell,cell,"#9B5DE5");
-  foreach(var p in data.ScanLine??Array.Empty<PreviewScanAddress>())Rect(p.X*cell,p.Y*cell,cell,cell,"#FF6376");
+  var missing=data.Pixels?.Where(p=>p.IsMissing).Select(p=>(p.X,p.Y)).ToHashSet()??[];
+  foreach(var p in data.ScanLine??Array.Empty<PreviewScanAddress>())if(!missing.Contains((p.X,p.Y)))Rect(p.X*cell,p.Y*cell,cell,cell,"#FF6376");
   for(int x=0;x<=data.Cols;x++)svg.Append($"<path d='M{x*cell} 0V{data.Rows*cell}' stroke='#3B4960' stroke-width='0.5'/>");
   for(int y=0;y<=data.Rows;y++)svg.Append($"<path d='M0 {y*cell}H{data.Cols*cell}' stroke='#3B4960' stroke-width='0.5'/>");
   for(int x=0;x<data.Cols;x++)Label((x+1).ToString(),x*cell+10,-9,"#70B8FF");
   for(int y=0;y<data.Rows;y++)Label((y+1).ToString(),-15,y*cell+13,"#70B8FF");
   var addresses=data.ScanLine?.Select(p=>(p.X,p.Y)).ToHashSet()??[];
   foreach(var p in data.Pixels??Array.Empty<PreviewPixel>())
-   if(!addresses.Contains((p.X,p.Y)))Label(p.Number.ToString(),p.X*cell+10,p.Y*cell+14,p.IsMissing?"white":"black",p.Number);
-  foreach(var p in data.ScanLine??Array.Empty<PreviewScanAddress>())Label(p.Index<16?((char)('A'+p.Index)).ToString():p.Index.ToString(),p.X*cell+10,p.Y*cell+14,"black");
+   if(p.IsMissing||!addresses.Contains((p.X,p.Y)))Label(p.Number.ToString(),p.X*cell+10,p.Y*cell+14,p.IsMissing?"white":"black",p.Number);
+  foreach(var p in data.ScanLine??Array.Empty<PreviewScanAddress>())if(!missing.Contains((p.X,p.Y)))Label(p.Index<16?((char)('A'+p.Index)).ToString():p.Index.ToString(),p.X*cell+10,p.Y*cell+14,"black");
   foreach(var gap in data.GapMarkers??Array.Empty<PreviewGapMarker>())
   {
    int x=gap.X*cell,y=gap.Y*cell;
@@ -29,7 +30,7 @@ public sealed class ModuleExportService
   svg.Append("</g></svg>");
   var report=new StringBuilder().AppendLine("# "+text("ExportReport")).AppendLine().AppendLine(state.OpenedFilePath).AppendLine().AppendLine("## "+text("Parameters"));
   foreach(var name in ModuleParameters.Names)report.AppendLine($"- {name}: {state.Parameters[name]}");
-  report.AppendLine().AppendLine("## "+text("Missing")).AppendLine(state.MissingPixels).AppendLine().AppendLine("## "+text("Diagnostics"));
+  report.AppendLine().AppendLine("## "+text("Missing")).AppendLine(string.Join(", ",new PointTableParser().Parse(state.PointTableData).Select((p,i)=>(p,i)).Where(a=>a.p.IsMissing).Select(a=>(a.i+1).ToString()))).AppendLine().AppendLine("## "+text("Diagnostics"));
   foreach(var issue in new ModuleDiagnosticService().Analyze(state))report.AppendLine($"- {text(issue.Severity)}: {message(issue.Message)} ({issue.Field})");
   foreach(var field in new[]{("PointTableData",state.PointTableData),("NewScanABCDCode",state.NewScanABCDCode),("ScanABCDCode",state.ScanABCDCode)})report.AppendLine().AppendLine("## "+field.Item1).AppendLine().AppendLine(field.Item2);
   var csv=new StringBuilder("Number,X,Y,Missing,Inferred\r\n");

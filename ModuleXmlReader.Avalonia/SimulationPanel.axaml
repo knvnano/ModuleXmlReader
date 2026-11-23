@@ -2,7 +2,7 @@
              xmlns:vm="using:ModuleXmlReader.Presentation.ViewModels"
              x:Class="ModuleXmlReader.Avalonia.SimulationPanel" x:DataType="vm:SimulationViewModel">
   <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-    <StackPanel Spacing="12" Margin="14,0,0,0">
+    <StackPanel Spacing="12" Margin="14,0,12,0">
       <TextBlock Text="{Binding Text[SimTitle]}" FontWeight="SemiBold" FontSize="15" />
       <TextBlock Text="{Binding Text[SimLogical]}" TextWrapping="Wrap" FontSize="11" Foreground="#94A7C2" />
       <StackPanel Orientation="Horizontal" Spacing="6">

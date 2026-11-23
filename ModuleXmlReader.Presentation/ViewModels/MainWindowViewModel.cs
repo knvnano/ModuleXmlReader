@@ -25,11 +25,13 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     public double SidebarWidth => IsSidebarExpanded ? 228 : 72;
     public double SidebarLabelOpacity => IsSidebarExpanded ? 1 : 0;
     public bool IsEditorPage => _selectedPage == "editor";
+    public bool IsToolsPage => _selectedPage=="tools";
+    public RelayCommand ShowToolsCommand { get; }
     public bool IsChangesPage => _selectedPage == "changes";
     public bool IsLogsPage => _selectedPage == "logs";
     public bool IsAboutPage => _selectedPage == "about";
-    public string PageTitle => Text[IsEditorPage ? "Editor" : IsChangesPage ? "Changelog" : IsLogsPage ? "Logs" : "About"];
-    public string PageSubtitle => Text[IsEditorPage ? "EditorSubtitle" : IsChangesPage ? "ChangelogSubtitle" : IsLogsPage ? "LogsSubtitle" : "AboutSubtitle"];
+    public string PageTitle => Text[IsToolsPage ? "Tools" : IsEditorPage ? "Editor" : IsChangesPage ? "Changelog" : IsLogsPage ? "Logs" : "About"];
+    public string PageSubtitle => Text[IsToolsPage ? "ToolsSubtitle" : IsEditorPage ? "EditorSubtitle" : IsChangesPage ? "ChangelogSubtitle" : IsLogsPage ? "LogsSubtitle" : "AboutSubtitle"];
     public string LanguageButtonText => Text.Language == "ru" ? "RUS / eng" : "rus / ENG";
     public bool IsActivityLog => _logKind == LogKind.Activity;
     public bool IsErrorLog => _logKind == LogKind.Errors;
@@ -94,6 +96,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         _changesReader = changes; _logsReader = logs;
         ToggleSidebarCommand = new(() => IsSidebarExpanded = !IsSidebarExpanded);
         ToggleLanguageCommand = new(Text.Toggle);
+        ShowToolsCommand = new(()=>Navigate("tools"));
         ShowEditorCommand = new(() => Navigate("editor"));
         ShowAboutPageCommand = new(() => Navigate("about"));
         ShowChangesCommand = new(() => GuardAsync(async () => { Navigate("changes"); await LoadChangesAsync(); }), () => !IsBusy);
@@ -217,7 +220,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     {
         if (page != "editor") Simulation.Pause();
         _selectedPage = page;
-        foreach (var name in new[] { nameof(IsEditorPage), nameof(IsChangesPage), nameof(IsLogsPage), nameof(IsAboutPage), nameof(PageTitle), nameof(PageSubtitle) }) RaisePropertyChanged(name);
+        foreach (var name in new[] { nameof(IsToolsPage), nameof(IsEditorPage), nameof(IsChangesPage), nameof(IsLogsPage), nameof(IsAboutPage), nameof(PageTitle), nameof(PageSubtitle) }) RaisePropertyChanged(name);
         _log.Debug("Navigation: " + page);
     }
     private async Task LoadChangesAsync()
@@ -248,6 +251,6 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         foreach (var name in new[] { nameof(PageTitle), nameof(PageSubtitle), nameof(LanguageButtonText), nameof(AboutText) }) RaisePropertyChanged(name);
         _log.Info("UI language changed: " + Text.Language);
     }
-    public void Dispose() { Text.LanguageChanged -= LanguageChanged; Simulation.Dispose(); }
+    public void Dispose() { Text.LanguageChanged -= LanguageChanged; Simulation.Dispose(); Navigation.Dispose(); }
 
 }

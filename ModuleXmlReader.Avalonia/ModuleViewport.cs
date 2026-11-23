@@ -113,7 +113,10 @@ public sealed class ModuleViewport : UserControl
     private void NavigationChanged(object? sender,System.ComponentModel.PropertyChangedEventArgs e)
     {
         if(e.PropertyName=="Locations") { Preview.Selection=Navigation?.Locations ?? []; Preview.InvalidateVisual(); }
-        if(e.PropertyName!="RequestVersion" || Navigation?.Locations.FirstOrDefault() is not { } p || Navigation.Locations.Count==0) return;
+        if(e.PropertyName!="RequestVersion" || Navigation is null || Navigation.Locations.Count==0) return;
+        var region=Data?.Simulation?.Groups.FirstOrDefault(g=>g.InputId==Simulation?.SelectedGroup);
+        var locations=Navigation.Locations.Where(p=>region is null || p.X>=region.X&&p.X<region.X+region.Width&&p.Y>=region.Y&&p.Y<region.Y+region.Height).ToArray();
+        if(locations.Length==0)return;var p=locations[0];
         _fit=false; Preview.CellSize=Math.Max(Preview.CellSize,18); UpdateLayout();
         Scroller.Offset=new Vector((p.X+0.5)*Preview.CellSize-Scroller.Viewport.Width/2,(p.Y+0.5)*Preview.CellSize-Scroller.Viewport.Height/2); UpdateRulers();
     }

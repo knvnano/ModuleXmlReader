@@ -51,7 +51,9 @@ public sealed class ModulePreview : Control
     protected override void OnPointerPressed(global::Avalonia.Input.PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e); if(!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)return;
-        var pos=e.GetPosition(this); int x=(int)(pos.X/CellSize),y=(int)(pos.Y/CellSize);
+        var pos=e.GetPosition(this);
+        if(Data?.Simulation?.Groups.FirstOrDefault(g=>g.InputId==SelectedGroup) is { } selected && !new Rect(selected.X*CellSize,selected.Y*CellSize,selected.Width*CellSize,selected.Height*CellSize).Contains(pos)) return;
+        int x=(int)(pos.X/CellSize),y=(int)(pos.Y/CellSize);
         if(Data?.Pixels?.FirstOrDefault(p=>p.X==x&&p.Y==y) is { Number:>0 } point) PixelClicked?.Invoke(point.Number);
     }
     public IReadOnlyList<PreviewPoint> Selection { get; set; } = Array.Empty<PreviewPoint>();

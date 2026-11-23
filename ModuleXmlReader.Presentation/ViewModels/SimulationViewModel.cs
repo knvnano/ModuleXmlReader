@@ -60,7 +60,7 @@ public sealed class SimulationViewModel : ObservableObject, IDisposable
     public void UpdateModel(SimulationModel? model)
     {
         if (ReferenceEquals(_model, model)) return;
-        Pause(); _traceNumber=0; _model = model; IsEnabled = false; _outputHold = 0;
+        Pause(); _traceNumber=0; _selectedGroupChoice=null; _model = model; IsEnabled = false; _outputHold = 0;
         _engine = model is { Problem: null } && model.Points.Count > 0 && model.Addresses.Count > 0 ? new(model) : null;
         RefreshGroupChoices(); RaisePropertyChanged(nameof(CanSimulate)); Publish();
     }

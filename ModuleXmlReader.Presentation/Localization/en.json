@@ -39,7 +39,7 @@
   "InferredTip": "No. {0} — missing (position inferred from a straight trace)",
   "MenuToggle": "Collapse / expand navigation",
   "Workspace": "WORKSPACE",
-  "Tools": "TOOLS",
+  "Tools": "Tools",
   "Refresh": "Refresh",
   "Error": "Error",
   "Saving": "Save",
@@ -159,5 +159,6 @@
   "BatchEmpty": "No .module files found",
   "Export": "Export",
   "ExportReport": "Module report",
-  "ExportDone": "Export saved: {0}"
+  "ExportDone": "Export saved: {0}",
+  "ToolsSubtitle": "Diagnostics, file comparison, batch processing and action history."
 }

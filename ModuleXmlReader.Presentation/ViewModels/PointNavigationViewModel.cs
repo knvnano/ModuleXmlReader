@@ -2,7 +2,7 @@ using ModuleXmlReader.Domain;
 using ModuleXmlReader.Presentation.Commands;
 using ModuleXmlReader.Presentation.Localization;
 namespace ModuleXmlReader.Presentation.ViewModels;
-public sealed class PointNavigationViewModel : ObservableObject
+public sealed class PointNavigationViewModel : ObservableObject, IDisposable
 {
     public TextCatalog Text { get; }
     private PreviewData? _data;
@@ -26,8 +26,10 @@ public sealed class PointNavigationViewModel : ObservableObject
     {
         Text=text; GoCommand=new(Go);
         PreviousMissingCommand=new(()=>MoveMissing(-1)); NextMissingCommand=new(()=>MoveMissing(1));
-        Text.LanguageChanged+=(_,_)=>RaisePropertyChanged(nameof(Error));
+        Text.LanguageChanged+=LanguageChanged;
     }
+    private void LanguageChanged(object? sender,EventArgs e)=>RaisePropertyChanged(nameof(Error));
+    public void Dispose()=>Text.LanguageChanged-=LanguageChanged;
     public void Update(PreviewData? data,string raw)
     {
         if (ReferenceEquals(data,_data) && raw==_raw) return;
@@ -55,8 +57,8 @@ public sealed class PointNavigationViewModel : ObservableObject
         _start=tokens.Take((n-1)*2).Sum(t=>t.Length+1);
         _end=_start+tokens[(n-1)*2].Length+1+tokens[(n-1)*2+1].Length;
         Locations=_data?.Pixels?.Where(p=>p.Number==n).Select(p=>new PreviewPoint(p.X,p.Y)).ToArray() ?? [];
-        if (Locations.Count==0 && _data?.GapMarkers is { } gaps)
-            Locations=gaps.Where(g=>n>=g.FirstMissing && n<g.FirstMissing+g.Count).Select(g=>new PreviewPoint(g.X,g.Y)).Distinct().ToArray();
+        if (Missing.Any(m=>m.Number==n) && _data?.GapMarkers is { } gaps)
+            Locations=Locations.Concat(gaps.Where(g=>n>=g.FirstMissing && n<g.FirstMissing+g.Count).Select(g=>new PreviewPoint(g.X,g.Y))).Distinct().ToArray();
         _version++;
         foreach(var p in new[]{nameof(Error),nameof(SelectedNumber),nameof(SelectionStart),nameof(SelectionEnd),nameof(Locations),nameof(RequestVersion)}) RaisePropertyChanged(p);
     }

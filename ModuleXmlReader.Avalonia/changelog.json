@@ -1,5 +1,25 @@
 [
   {
+    "version": "0.7.0",
+    "date": "2026-11-23",
+    "titleRu": "Инструменты работы с модулем",
+    "titleEn": "Module editing tools",
+    "itemsRu": [
+      "Переход к точке и пропускам, связанный табличный редактор координат.",
+      "Undo/Redo, история действий и сравнение с эталонным файлом.",
+      "Сводная диагностика, обход трассы и выбор группы данных.",
+      "Редактор активных адресов и контроль изменений перед сохранением.",
+      "Пакетная проверка/повороты и экспорт SVG, Markdown и CSV."
+    ],
+    "itemsEn": [
+      "Point and gap navigation with a linked coordinate table.",
+      "Undo/redo, action history and reference file comparison.",
+      "Aggregate diagnostics, trace traversal and data group filtering.",
+      "Active address editor and change review before saving.",
+      "Batch validation/rotation and SVG, Markdown and CSV export."
+    ]
+  },
+  {
     "version": "0.6.0",
     "date": "2026-11-23",
     "titleRu": "Анимация работы модуля",
