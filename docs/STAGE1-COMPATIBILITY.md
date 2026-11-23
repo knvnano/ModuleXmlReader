@@ -52,7 +52,7 @@ UI-проверки запускаются через Avalonia.Headless.XUnit и
 главное окно отрисовано и визуально проверено. Нативные файловые диалоги и переход
 по внешней ссылке автоматически не проверялись.
 Отчёт тестов: `ModuleXmlReader.CharacterizationTests/TestResults/stage1.trx`.
-Снимок главного окна: [stage1-main-window.png](screenshots/editor.png).
+Снимок главного окна: [Актуальный интерфейс](screenshots/editor.png).
 
 Исходный Form1.cs SHA-256:
 `cecf534d65114d4cca86e3a5c46dec2093794a662cd5679dc1d072446bf528e0`

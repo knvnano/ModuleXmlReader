@@ -13,9 +13,7 @@
 
 Снимки:
 
-- [Редактор RU](screenshots/editor.png)
-- [Редактор EN](screenshots/editor.png)
-- [История изменений](screenshots/editor.png)
+- [Актуальный интерфейс редактора](screenshots/editor.png)
 
 ## Мгновенный перевод
 
