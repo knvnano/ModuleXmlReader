@@ -7,8 +7,8 @@ using ModuleXmlReader.Presentation.Services;
 using ModuleXmlReader.Presentation.ViewModels;
 namespace ModuleXmlReader.Avalonia.Services;
 
-public sealed class AvaloniaDialogService(Window owner, IExternalLinkService links, TextCatalog? catalog = null, IAppLogger? logger = null)
-    : IFileDialogService, INotificationService, IAboutDialogService, IUnsavedChangesService
+public sealed partial class AvaloniaDialogService(Window owner, IExternalLinkService links, TextCatalog? catalog = null, IAppLogger? logger = null)
+    : IFileDialogService, INotificationService, IAboutDialogService, IUnsavedChangesService, ISaveReviewService
 {
     private readonly TextCatalog _text = catalog ?? new TextCatalog();
     private FilePickerFileType ModuleType => new(_text["ModuleFiles"])

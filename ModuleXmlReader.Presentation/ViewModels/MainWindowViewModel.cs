@@ -54,6 +54,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     private readonly IFileDialogService _files;
     private readonly INotificationService _notifications;
     private readonly IUnsavedChangesService _unsaved;
+    private readonly ISaveReviewService? _saveReview;
     private bool _refreshing, _isBusy, _isLoaded, _hasChanges;
     private string _pointTableData = "", _newScanABCDCode = "", _scanABCDCode = "";
     private string _missingPixels = "", _validationError = "", _openedFilePath = "";
@@ -86,7 +87,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     public MainWindowViewModel(IModuleEditorService editor, IFileDialogService files,
         INotificationService notifications, IAboutDialogService about, IUnsavedChangesService unsaved,
-        TextCatalog? text = null, IChangelogReader? changes = null, ILogReader? logs = null, IAppLogger? logger = null, IAnimationClock? animationClock = null, IModuleComparisonService? comparison = null)
+        TextCatalog? text = null, IChangelogReader? changes = null, ILogReader? logs = null, IAppLogger? logger = null, IAnimationClock? animationClock = null, IModuleComparisonService? comparison = null, ISaveReviewService? saveReview = null)
     {
         Text = text ?? new TextCatalog(); Navigation = new(Text);
         Navigation.PropertyChanged+=(_,e)=> { if(e.PropertyName==nameof(Navigation.RequestVersion)) SelectedCoordinate=Coordinates.FirstOrDefault(p=>p.Number==Navigation.SelectedNumber); }; Simulation = new SimulationViewModel(Text, animationClock ?? new ManualAnimationClock()); _log = logger ?? NullAppLogger.Instance;
@@ -103,7 +104,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         ErrorLogsCommand = new(() => SelectLogsAsync(LogKind.Errors), () => !IsBusy);
         DiagnosticLogsCommand = new(() => SelectLogsAsync(LogKind.Diagnostics), () => !IsBusy);
         Text.LanguageChanged += LanguageChanged;
-        _comparison = comparison;
+        _saveReview=saveReview; _comparison = comparison;
         CompareCommand = new(()=>GuardAsync(CompareAsync),()=>!IsBusy && IsLoaded && _comparison is not null);
         _editor = editor; _files = files; _notifications = notifications; _unsaved = unsaved;
         Parameters = Array.AsReadOnly(ModuleParameters.Names.Select(name => new ParameterViewModel(name, editor.State.Parameters[name])).ToArray());
@@ -130,6 +131,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     }
     private async Task<bool> SaveCoreAsync()
     {
+        if(_saveReview is not null && !await _saveReview.ConfirmSaveAsync(new SaveReview(_editor.GetSaveDifferences())))return false;
         var path = await _files.PickSaveFileAsync();
         if (path is null) return false;
         bool saved = _editor.Save(path);

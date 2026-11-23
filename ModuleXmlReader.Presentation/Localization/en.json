@@ -142,5 +142,8 @@
   "TraceStatus": "Trace point {0} / {1}. Missing entries retain their positions.",
   "AllGroups": "All data groups",
   "ActiveCode": "Active address",
-  "PaddingCode": "Padding"
+  "PaddingCode": "Padding",
+  "SaveReviewTitle": "Review before saving",
+  "SaveReviewSummary": "Changed parameters: {0}\nAffected points: {1}\nNew missing points: {2}\nTotal differences: {3}",
+  "DetailedComparison": "Detailed comparison"
 }

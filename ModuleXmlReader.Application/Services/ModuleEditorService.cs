@@ -29,6 +29,8 @@ public sealed class ModuleEditorService(IModuleRepository repository, IMissingPi
         State.HasChanges=Signature(State)!=_savedSignature; _actions.Add(action);
         if(_actions.Count>200)_actions.RemoveAt(0);
     }
+    private ModuleEditorState? _savedState;
+    public IReadOnlyList<ModuleDifference> GetSaveDifferences() => _savedState is null ? Array.Empty<ModuleDifference>() : new ModuleComparisonService(repository).Compare(_savedState,State);
     private string _savedSignature = string.Empty;
     public ModuleEditorState State { get; } = new();
 
@@ -48,7 +50,7 @@ public sealed class ModuleEditorService(IModuleRepository repository, IMissingPi
             candidate.RotationDegrees = rotations.DetectOrientation(candidate);
             _document = document;
             Apply(candidate);
-            _savedSignature = Signature(State);
+            _savedSignature = Signature(State); _savedState=CopyState();
             _undo.Clear(); _redo.Clear(); _actions.Clear();
             State.HasChanges = false;
             _log.Info($"Module opened: {filePath}");
@@ -76,7 +78,7 @@ public sealed class ModuleEditorService(IModuleRepository repository, IMissingPi
             repository.Save(document, filePath);
             _document = document;
             State.OpenedFilePath = filePath;
-            _savedSignature = Signature(State);
+            _savedSignature = Signature(State); _savedState=CopyState();
             State.HasChanges = false;
             _log.Info($"Module saved: {filePath}");
             Notify("Файл успешно сохранён как " + filePath, "Сохранение", new("SaveSuccess", filePath, filePath));
